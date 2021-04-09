@@ -1,0 +1,44 @@
+{
+  "experiments": [
+    {
+      "alias": "AB-1234-AB-1234-SampleA-1-NovaSeq",
+      "title": "AB-1234 - AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+      "project": {
+        "project_id": "AB-1234"
+      },
+      "platform": {
+        "model_name": "NovaSeq"
+      },
+      "library": {
+        "sample": {
+          "sample_id": "AB-1234-SampleA-1"
+        },
+        "description": "AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+        "application": "WG Re-Seq",
+        "sample_type": "gDNA",
+        "library_kit": "TruSeq DNA PCR-free Sample Preparation kit HT",
+        "is_paired": true
+      }
+    },
+    {
+      "alias": "AB-1234-AB-1234-SampleB-2-NovaSeq",
+      "title": "AB-1234 - AB-1234-SampleB-2 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+      "project": {
+        "project_id": "AB-1234"
+      },
+      "platform": {
+        "model_name": "NovaSeq"
+      },
+      "library": {
+        "sample": {
+          "sample_id": "AB-1234-SampleB-2"
+        },
+        "description": "AB-1234-SampleB-2 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+        "application": "WG Re-Seq",
+        "sample_type": "gDNA",
+        "library_kit": "TruSeq DNA PCR-free Sample Preparation kit HT",
+        "is_paired": true
+      }
+    }
+  ]
+}
