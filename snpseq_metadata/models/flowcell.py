@@ -2,7 +2,7 @@ import os
 from typing import List, Optional
 
 import snpseq_metadata.utilities
-from snpseq_metadata.models.experiment import Experiment
+from snpseq_metadata.models.experiment import ExperimentRef
 from snpseq_metadata.models.file_models import FastqFile
 
 
@@ -27,7 +27,7 @@ class Flowcell:
         )
         return checksumfile if os.path.exists(checksumfile) else None
 
-    def get_fastqdir_for_experiment(self, experiment: Experiment) -> str:
+    def get_fastqdir_for_experiment(self, experiment: ExperimentRef) -> str:
         fastqdir = self.runfolder_path
         patterns = [
             ["Unaligned", "Demultiplexing"],
@@ -46,18 +46,18 @@ class Flowcell:
             )
         return fastqdir
 
-    def get_experiments(self) -> List[Experiment]:
+    def get_experiments(self) -> List[ExperimentRef]:
         samplesheet_data = snpseq_metadata.utilities.parse_samplesheet_data(
             os.path.join(self.runfolder_path, self.samplesheet)
         )
         experiments = []
         for samplesheet_row in samplesheet_data:
-            experiment = Experiment.from_samplesheet_row(samplesheet_row)
+            experiment = ExperimentRef.from_samplesheet_row(samplesheet_row)
             if experiment not in experiments:
                 experiments.append(experiment)
         return experiments
 
-    def get_files_for_experiment(self, experiment: Experiment) -> List[FastqFile]:
+    def get_files_for_experiment(self, experiment: ExperimentRef) -> List[FastqFile]:
         fastqdir = self.get_fastqdir_for_experiment(experiment)
         fastq_extensions = ["fastq.gz", "fastq", "fq.gz", "fq"]
         fastqfiles = []

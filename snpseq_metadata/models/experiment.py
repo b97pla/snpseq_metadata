@@ -1,9 +1,9 @@
 from typing import Dict, TypeVar
 
-T = TypeVar("T", bound="Experiment")
+T = TypeVar("T", bound="ExperimentRef")
 
 
-class Experiment:
+class ExperimentRef:
     def __init__(
         self, experiment_name: str, sample_project: str, sample_id: str, **kwargs: str
     ) -> None:
@@ -25,7 +25,25 @@ class Experiment:
     @classmethod
     def from_samplesheet_row(cls, samplesheet_row: Dict[str, str]) -> T:
         experiment_name = samplesheet_row["description"].split(":")[-1]
-        return Experiment(
+        return ExperimentRef(
             experiment_name=experiment_name,
             **{k: v for k, v in samplesheet_row.items()}
         )
+
+
+class Experiment:
+    def __init__(self, alias: str, title: str, study_ref: str, **kwargs: str) -> None:
+        self.alias = alias
+        self.title = title
+        self.study_ref = study_ref
+        for field, value in kwargs.items():
+            setattr(self, field.lower(), value)
+
+    def __eq__(self, other) -> bool:
+        return self.experiment_name == other.experiment_name
+
+    def __str__(self) -> str:
+        return self.experiment_name
+
+    def to_json(self) -> Dict[str, str]:
+        return {}
