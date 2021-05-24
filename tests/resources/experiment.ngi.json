@@ -1,19 +1,19 @@
 {
   "experiments": [
     {
-      "alias": "AB-1234-AB-1234-SampleA-1-NovaSeq",
-      "title": "AB-1234 - AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+      "alias": "AB-1234-Sample_AB-1234-SampleA-1-NovaSeq",
       "project": {
         "project_id": "AB-1234"
       },
+      "title": "AB-1234 - Sample_AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
       "platform": {
         "model_name": "NovaSeq"
       },
       "library": {
         "sample": {
-          "sample_id": "AB-1234-SampleA-1"
+          "sample_id": "Sample_AB-1234-SampleA-1"
         },
-        "description": "AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+        "description": "Sample_AB-1234-SampleA-1 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
         "application": "WG Re-Seq",
         "sample_type": "gDNA",
         "library_kit": "TruSeq DNA PCR-free Sample Preparation kit HT",
@@ -21,23 +21,43 @@
       }
     },
     {
-      "alias": "AB-1234-AB-1234-SampleB-2-NovaSeq",
-      "title": "AB-1234 - AB-1234-SampleB-2 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+      "alias": "AB-1234-Sample_AB-1234-SampleB-NovaSeq",
       "project": {
         "project_id": "AB-1234"
       },
+      "title": "AB-1234 - Sample_AB-1234-SampleB - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
       "platform": {
         "model_name": "NovaSeq"
       },
       "library": {
         "sample": {
-          "sample_id": "AB-1234-SampleB-2"
+          "sample_id": "Sample_AB-1234-SampleB"
         },
-        "description": "AB-1234-SampleB-2 - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
+        "description": "Sample_AB-1234-SampleB - WG Re-Seq - gDNA - TruSeq DNA PCR-free Sample Preparation kit HT",
         "application": "WG Re-Seq",
         "sample_type": "gDNA",
         "library_kit": "TruSeq DNA PCR-free Sample Preparation kit HT",
         "is_paired": true
+      }
+    },
+    {
+      "alias": "[PROJECT IDENTIFIER]-[SAMPLE IDENTIFIER]-[INSTRUMENT MODEL]",
+      "project": {
+        "project_id": "[PROJECT IDENTIFIER]"
+      },
+      "title": "[PROJECT IDENTIFIER] - [SAMPLE IDENTIFIER] - [SEQUENCING APPLICATION] - [SAMPLE TYPE] - [LIBRARY KIT]",
+      "platform": {
+        "model_name": "[INSTRUMENT MODEL]"
+      },
+      "library": {
+        "sample": {
+          "sample_id": "[SAMPLE IDENTIFIER]"
+        },
+        "description": "[SAMPLE IDENTIFIER] - [SEQUENCING APPLICATION] - [SAMPLE TYPE] - [LIBRARY KIT]",
+        "application": "[SEQUENCING APPLICATION]",
+        "sample_type": "[SAMPLE TYPE]",
+        "library_kit": "[LIBRARY KIT]",
+        "is_paired": "[True/False]"
       }
     }
   ]

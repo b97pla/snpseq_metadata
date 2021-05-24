@@ -15,13 +15,33 @@ from snpseq_metadata.models.xsdata import (
 TR = TypeVar("TR", bound="SRAExperimentRef")
 T = TypeVar("T", bound="SRAExperiment")
 TS = TypeVar("TS", bound="SRAExperimentSet")
+TB = TypeVar("TB", bound="SRAExperimentBase")
 
 
-class SRAExperimentRef(SRAMetadataModel):
+class SRAExperimentBase(SRAMetadataModel):
+    model_object_class: ClassVar[Type]
+
+    def get_reference(self) -> TR:
+        raise NotImplementedError
+
+    def to_manifest(self) -> List[Tuple[str, str]]:
+        raise NotImplementedError
+
+    @classmethod
+    def create_object(cls: Type[TB], *args, **kwargs) -> TB:
+        raise NotImplementedError
+
+
+class SRAExperimentRef(SRAExperimentBase):
     model_object_class: ClassVar[Type] = Run.ExperimentRef
 
-    def __eq__(self, other) -> bool:
-        return self.model_object.refname == other.model_object.refname
+    def __eq__(self, other: TR) -> bool:
+        return all(
+            [
+                isinstance(other, SRAExperimentRef),
+                self.model_object.refname == other.model_object.refname,
+            ]
+        )
 
     def __str__(self) -> str:
         return self.model_object.refname
@@ -34,8 +54,19 @@ class SRAExperimentRef(SRAMetadataModel):
     def to_manifest(self) -> List[Tuple[str, str]]:
         return [("NAME", self.model_object.refname)]
 
+    def is_reference_to(self, other: T) -> bool:
+        return all(
+            [
+                isinstance(other, SRAExperiment),
+                self.model_object.refname == other.model_object.alias,
+            ]
+        )
 
-class SRAExperiment(SRAMetadataModel):
+    def get_reference(self) -> TR:
+        return self
+
+
+class SRAExperiment(SRAExperimentBase):
     model_object_class: ClassVar[Type] = XSDExperiment
 
     def __init__(
@@ -80,6 +111,9 @@ class SRAExperiment(SRAMetadataModel):
         manifest.extend(self.library.to_manifest())
         return manifest
 
+    def get_reference(self) -> SRAExperimentRef:
+        return SRAExperimentRef.create_object(experiment_name=self.model_object.alias)
+
 
 class SRAExperimentSet(SRAMetadataModel):
     model_object_class: ClassVar[Type] = XSDExperimentSet
@@ -104,3 +138,9 @@ class SRAExperimentSet(SRAMetadataModel):
         for experiment in self.experiments:
             manifest.extend(experiment.to_manifest())
         return manifest
+
+    def restrict_to_study(self, study_ref: SRAStudyRef) -> TS:
+        experiments = list(
+            filter(lambda exp: study_ref == exp.study_ref, self.experiments)
+        )
+        return self.create_object(experiments=experiments)

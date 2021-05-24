@@ -2,6 +2,7 @@ from snpseq_metadata.models.sra_models.experiment import (
     SRAExperimentRef,
     SRAExperiment,
     SRAExperimentSet,
+    SRAExperimentBase,
 )
 from snpseq_metadata.models.sra_models.file_models import (
     SRAFastqFile,

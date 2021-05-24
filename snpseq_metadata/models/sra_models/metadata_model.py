@@ -28,7 +28,7 @@ class SRAMetadataModel(MetadataModel):
         raise NotImplementedError
 
     @classmethod
-    def from_json(cls: Type[T], json_obj: Dict):
+    def from_json(cls: Type[T], json_obj: Dict) -> T:
         return ModelImporter.from_json(
             json_obj=json_obj, model_cls=cls.model_object_class
         )

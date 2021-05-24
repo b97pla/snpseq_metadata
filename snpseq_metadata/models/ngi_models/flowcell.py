@@ -82,8 +82,14 @@ class NGIFlowcell(NGIMetadataModel):
         fastqdir = self.runfolder_path
         patterns = [
             ["Unaligned", "Demultiplexing"],
-            [experiment_ref.project_id, f"Project_{experiment_ref.project_id}"],
-            [experiment_ref.sample_id, f"Sample_{experiment_ref.sample_id}"],
+            [
+                experiment_ref.project.project_id,
+                f"Project_{experiment_ref.project.project_id}",
+            ],
+            [
+                experiment_ref.sample.sample_id,
+                f"Sample_{experiment_ref.sample.sample_id}",
+            ],
         ]
         try:
             for pattern in patterns:
@@ -99,8 +105,8 @@ class NGIFlowcell(NGIMetadataModel):
                 )
         except IndexError:
             raise FastqFileLocationNotFoundException(
-                sample_project=experiment_ref.project_id,
-                sample_id=experiment_ref.sample_id,
+                sample_project=experiment_ref.project.project_id,
+                sample_id=experiment_ref.sample.sample_id,
                 search_path=fastqdir,
             )
 
@@ -118,8 +124,10 @@ class NGIFlowcell(NGIMetadataModel):
             if all(
                 [
                     experiment not in experiments,
-                    self.project_id is None or experiment.project_id == self.project_id,
-                    self.sample_id is None or experiment.sample_id == self.sample_id,
+                    self.project_id is None
+                    or experiment.project.project_id == self.project_id,
+                    self.sample_id is None
+                    or experiment.sample.sample_id == self.sample_id,
                 ]
             ):
                 experiments.append(experiment)
@@ -167,8 +175,8 @@ class NGIFlowcell(NGIMetadataModel):
     ) -> NGIRun:
         fastqfiles = self.get_files_for_experiment_ref(experiment_ref=experiment_ref)
         return NGIRun(
-            run_alias=f"{experiment_ref.project_id}-{experiment_ref.sample_id}-{self.flowcell_id}",
-            experiment_ref=experiment_ref,
+            run_alias=f"{experiment_ref.project.project_id}-{experiment_ref.sample.sample_id}-{self.flowcell_id}",
+            experiment=experiment_ref,
             platform=self.platform,
             run_date=self.run_date,
             fastqfiles=fastqfiles,
@@ -180,7 +188,7 @@ class NGIFlowcell(NGIMetadataModel):
         try:
             return next(
                 filter(
-                    lambda run: run.experiment_ref.is_reference_to(experiment),
+                    lambda run: run.experiment.is_reference_to(experiment),
                     self.sequencing_runs,
                 )
             )

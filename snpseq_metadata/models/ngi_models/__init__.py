@@ -2,6 +2,7 @@ from snpseq_metadata.models.ngi_models.experiment import (
     NGIExperimentRef,
     NGIExperiment,
     NGIExperimentSet,
+    NGIExperimentBase,
 )
 from snpseq_metadata.models.ngi_models.file_models import (
     NGIFastqFile,

@@ -7,7 +7,7 @@ from snpseq_metadata.models.ngi_models import (
     NGISampleDescriptor,
     NGILibrary,
     NGIExperiment,
-    NGISequencingPlatform,
+    NGIIlluminaSequencingPlatform,
     NGIExperimentSet,
 )
 
@@ -38,6 +38,18 @@ def temp_output(tmpdir):
     return os.path.join(tmpdir, "ngi_experiment_model.json")
 
 
+@pytest.fixture
+def experiment_json():
+    json_file = os.path.join("tests", "resources", "experiment.ngi.json")
+    with open(json_file) as fh:
+        return json.load(fh)
+
+
+@pytest.fixture
+def runfolder_path():
+    return os.path.join("tests", "resources", "210415_A00001_0123_BXYZ321XY")
+
+
 class TestNGIModel:
     def test_model(self, model_fields, temp_output):
         project = NGIStudyRef(project_id=model_fields["project_id"])
@@ -52,7 +64,7 @@ class TestNGIModel:
             library_kit=model_fields["library_kit"],
             is_paired=model_fields["is_paired"],
         )
-        platform = NGISequencingPlatform(model_name=model_fields["model_name"])
+        platform = NGIIlluminaSequencingPlatform(model_name=model_fields["model_name"])
         experiment = NGIExperiment(
             alias=model_fields["experiment_alias"],
             title=model_fields["experiment_title"],
@@ -71,3 +83,6 @@ class TestNGIModel:
         parsed_experiment_set = NGIExperimentSet.from_json(json_obj)
 
         assert parsed_experiment_set == experiment_set
+
+    def test_integrate_run_and_experiments(self, experiments_json, runfolder_path):
+        pass

@@ -30,9 +30,10 @@ class SRAIlluminaSequencingPlatform(SRASequencingPlatform):
             "hiseq2500": TypeIlluminaModel.ILLUMINA_HI_SEQ_2500,
             "hiseq": TypeIlluminaModel.ILLUMINA_HI_SEQ_2000,
             "nextseq": TypeIlluminaModel.NEXT_SEQ_500,
+            "": TypeIlluminaModel.UNSPECIFIED,
         }
         return cls._object_from_something(
-            needle=model_name,
+            needle=model_name or "",
             haystack=model_dict,
             on_error=InstrumentModelNotRecognizedException,
         )

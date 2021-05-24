@@ -3,7 +3,7 @@ import datetime
 from xsdata.models.datatype import XmlDateTime
 
 from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
-from snpseq_metadata.models.sra_models.experiment import SRAExperimentRef
+from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase
 from snpseq_metadata.models.sra_models.file_models import SRAFastqFile
 from snpseq_metadata.models.xsdata import Run
 
@@ -16,18 +16,18 @@ class SRARun(SRAMetadataModel):
     def __init__(
         self,
         model_object: model_object_class,
-        experiment_ref: Optional[SRAExperimentRef] = None,
+        experiment: Optional[SRAExperimentBase] = None,
         fastqfiles: Optional[List[SRAFastqFile]] = None,
     ) -> None:
         super().__init__(model_object=model_object)
-        self.experiment_ref = experiment_ref
+        self.experiment = experiment
         self.fastqfiles = fastqfiles
 
     @classmethod
     def create_object(
         cls: Type[T],
         run_alias: str,
-        experiment_ref: SRAExperimentRef,
+        experiment: SRAExperimentBase,
         run_center: str,
         fastqfiles: List[SRAFastqFile],
         run_date: Optional[datetime.datetime] = None,
@@ -42,12 +42,12 @@ class SRARun(SRAMetadataModel):
             run_center=run_center,
             run_date=xsd_run_date,
             center_name=run_center,
-            experiment_ref=experiment_ref.model_object,
+            experiment_ref=experiment.get_reference().model_object,
             data_block=xsd_data_block,
         )
         return cls(
             model_object=model_object,
-            experiment_ref=experiment_ref,
+            experiment=experiment,
             fastqfiles=fastqfiles,
         )
 
@@ -55,5 +55,5 @@ class SRARun(SRAMetadataModel):
         manifest = []
         for fastq in self.fastqfiles:
             manifest.extend(fastq.to_manifest())
-        manifest.extend(self.experiment_ref.to_manifest())
+        manifest.extend(self.experiment.to_manifest())
         return manifest

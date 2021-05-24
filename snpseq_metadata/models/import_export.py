@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Generic, List, Tuple, TypeVar, Type
+from typing import Dict, Generic, Tuple, TypeVar, Type
 
 from xsdata.formats.dataclass.serializers.json import JsonSerializer, DictFactory
 from xsdata.formats.dataclass.serializers.xml import XmlSerializer

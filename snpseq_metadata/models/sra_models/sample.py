@@ -17,3 +17,9 @@ class SRASampleDescriptor(SRAMetadataModel):
 
     def to_manifest(self) -> List[Tuple[str, str]]:
         return [("SAMPLE", self.model_object.refname)]
+
+    def __str__(self) -> str:
+        return self.model_object.refname
+
+    def __eq__(self, other: T) -> bool:
+        return all([isinstance(other, SRASampleDescriptor), str(self) == str(other)])

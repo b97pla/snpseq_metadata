@@ -1,4 +1,4 @@
-from typing import List, Type, TypeVar, Union
+from typing import List, Type, TypeVar, Union, Optional
 
 from snpseq_metadata.models.xsdata import (
     TypeLibrarySelection,
@@ -91,8 +91,8 @@ class ApplicationSampleTypeMapping:
         return cls_matches[0] if cls_matches else None
 
     @staticmethod
-    def _is_match(cls_value, other_value):
-        return (
+    def _is_match(cls_value: Union[str, List[str]], other_value: Optional[str]) -> bool:
+        return other_value is not None and (
             other_value.lower() in cls_value
             if type(cls_value) == list
             else other_value.lower() == cls_value
@@ -132,7 +132,7 @@ class RNASeqKitMRNA(RNASeqApplication):
         "truseq stranded mrna sample preparation kit ht",
     ]
 
-    sra_library_selection = TypeLibrarySelection.C_DNA
+    sra_library_selection = TypeLibrarySelection.POLY_A
 
 
 class RNASeqKitTotalRNA(RNASeqApplication):
@@ -148,6 +148,20 @@ class RNASeqKitTotalRNA(RNASeqApplication):
     ]
 
     sra_library_selection = TypeLibrarySelection.INVERSE_R_RNA
+
+
+class SingleCellApplication(ApplicationSampleTypeMapping):
+    """
+    Single-cell
+    """
+
+    ngi_application = "single-cell"
+    ngi_sample_type = "cells/nuclei"
+    ngi_sample_prep_kit = "Chromium single cell 3’ Library prep"
+
+    sra_library_strategy = TypeLibraryStrategy.SS_RNA_SEQ
+    sra_library_source = TypeLibrarySource.TRANSCRIPTOMIC_SINGLE_CELL
+    sra_library_selection = TypeLibrarySelection.POLY_A
 
 
 class Bisulphite(ApplicationSampleTypeMapping):

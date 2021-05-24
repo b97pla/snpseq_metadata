@@ -6,17 +6,45 @@ from snpseq_metadata.models.ngi_models.sequencing_platform import (
 from snpseq_metadata.models.ngi_models.library import NGILibrary
 from snpseq_metadata.models.ngi_models.metadata_model import NGIMetadataModel
 from snpseq_metadata.models.ngi_models.study import NGIStudyRef
+from snpseq_metadata.models.ngi_models.sample import NGISampleDescriptor
 
 T = TypeVar("T", bound="NGIExperiment")
+TB = TypeVar("TB", bound="NGIExperimentBase")
 TR = TypeVar("TR", bound="NGIExperimentRef")
 TS = TypeVar("TS", bound="NGIExperimentSet")
 
 
-class NGIExperimentRef(NGIMetadataModel):
-    def __init__(self, experiment_name: str, project_id: str, sample_id: str) -> None:
-        self.experiment_name = experiment_name
-        self.project_id = project_id
-        self.sample_id = sample_id
+class NGIExperimentBase(NGIMetadataModel):
+    def __init__(self, alias: str, project: NGIStudyRef) -> None:
+        self.alias = alias
+        self.project = project
+
+    @classmethod
+    def from_json(cls: Type[TB], json_obj: Dict) -> TB:
+        if "sample" in json_obj:
+            return NGIExperimentRef.from_json(json_obj=json_obj)
+        else:
+            return NGIExperiment.from_json(json_obj=json_obj)
+
+    def is_reference_to(self, other: T) -> bool:
+        return all(
+            [
+                isinstance(self, NGIExperimentRef),
+                isinstance(other, NGIExperiment),
+                self.alias == other.alias,
+            ]
+        )
+
+    def get_reference(self) -> TR:
+        raise NotImplementedError
+
+
+class NGIExperimentRef(NGIExperimentBase):
+    def __init__(
+        self, alias: str, project: NGIStudyRef, sample: NGISampleDescriptor
+    ) -> None:
+        super().__init__(alias, project)
+        self.sample = sample
 
     @classmethod
     def from_samplesheet_row(
@@ -24,24 +52,26 @@ class NGIExperimentRef(NGIMetadataModel):
     ) -> TR:
         project_id = samplesheet_row.get("sample_project")
         sample_id = samplesheet_row.get("sample_id")
-        experiment_name = f"{project_id}-{sample_id}-{platform.model_name}"
+        alias = f"{project_id}-{sample_id}-{platform.model_name}"
         return cls(
-            experiment_name=experiment_name, project_id=project_id, sample_id=sample_id
+            alias=alias,
+            project=NGIStudyRef(project_id=project_id),
+            sample=NGISampleDescriptor(sample_id=sample_id),
         )
 
     @classmethod
     def from_json(cls: Type[TR], json_obj: Dict) -> TR:
         return cls(
-            experiment_name=json_obj.get("experiment_name"),
-            project_id=json_obj.get("project_id"),
-            sample_id=json_obj.get("sample_id"),
+            alias=json_obj.get("alias"),
+            project=NGIStudyRef.from_json(json_obj.get("project")),
+            sample_id=NGISampleDescriptor.from_json(json_obj.get("sample")),
         )
 
-    def is_reference_to(self, other: T) -> bool:
-        return isinstance(other, NGIExperiment) and self.experiment_name == other.alias
+    def get_reference(self) -> TR:
+        return self
 
 
-class NGIExperiment(NGIMetadataModel):
+class NGIExperiment(NGIExperimentBase):
     def __init__(
         self,
         alias: str,
@@ -50,9 +80,8 @@ class NGIExperiment(NGIMetadataModel):
         platform: NGIIlluminaSequencingPlatform,
         library: NGILibrary,
     ) -> None:
-        self.alias = alias
+        super().__init__(alias, project)
         self.title = title
-        self.project = project
         self.platform = platform
         self.library = library
 
@@ -69,6 +98,11 @@ class NGIExperiment(NGIMetadataModel):
             project=project,
             platform=platform,
             library=library,
+        )
+
+    def get_reference(self) -> NGIExperimentRef:
+        return NGIExperimentRef(
+            alias=self.alias, project=self.project, sample=self.library.sample
         )
 
 

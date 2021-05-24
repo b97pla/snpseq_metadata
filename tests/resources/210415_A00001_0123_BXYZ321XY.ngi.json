@@ -15,10 +15,14 @@
     {
       "run_alias": "AB-1234-Sample_AB-1234-SampleA-1-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "AB-1234-Sample_AB-1234-SampleA-1-NovaSeq",
-        "project_id": "AB-1234",
-        "sample_id": "Sample_AB-1234-SampleA-1"
+      "experiment": {
+        "alias": "AB-1234-Sample_AB-1234-SampleA-1-NovaSeq",
+        "project": {
+          "project_id": "AB-1234"
+        },
+        "sample": {
+          "sample_id": "Sample_AB-1234-SampleA-1"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
@@ -54,10 +58,14 @@
     {
       "run_alias": "AB-1234-Sample_AB-1234-SampleA-2-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "AB-1234-Sample_AB-1234-SampleA-2-NovaSeq",
-        "project_id": "AB-1234",
-        "sample_id": "Sample_AB-1234-SampleA-2"
+      "experiment": {
+        "alias": "AB-1234-Sample_AB-1234-SampleA-2-NovaSeq",
+        "project": {
+          "project_id": "AB-1234"
+        },
+        "sample": {
+          "sample_id": "Sample_AB-1234-SampleA-2"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
@@ -93,10 +101,14 @@
     {
       "run_alias": "AB-1234-Sample_AB-1234-SampleB-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "AB-1234-Sample_AB-1234-SampleB-NovaSeq",
-        "project_id": "AB-1234",
-        "sample_id": "Sample_AB-1234-SampleB"
+      "experiment": {
+        "alias": "AB-1234-Sample_AB-1234-SampleB-NovaSeq",
+        "project": {
+          "project_id": "AB-1234"
+        },
+        "sample": {
+          "sample_id": "Sample_AB-1234-SampleB"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
@@ -132,10 +144,14 @@
     {
       "run_alias": "CD-5678-CD-5678-SampleA-1-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "CD-5678-CD-5678-SampleA-1-NovaSeq",
-        "project_id": "CD-5678",
-        "sample_id": "CD-5678-SampleA-1"
+      "experiment": {
+        "alias": "CD-5678-CD-5678-SampleA-1-NovaSeq",
+        "project": {
+          "project_id": "CD-5678"
+        },
+        "sample": {
+          "sample_id": "CD-5678-SampleA-1"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
@@ -171,10 +187,14 @@
     {
       "run_alias": "CD-5678-CD-5678-SampleA-2-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "CD-5678-CD-5678-SampleA-2-NovaSeq",
-        "project_id": "CD-5678",
-        "sample_id": "CD-5678-SampleA-2"
+      "experiment": {
+        "alias": "CD-5678-CD-5678-SampleA-2-NovaSeq",
+        "project": {
+          "project_id": "CD-5678"
+        },
+        "sample": {
+          "sample_id": "CD-5678-SampleA-2"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
@@ -210,10 +230,14 @@
     {
       "run_alias": "CD-5678-CD-5678-SampleB-BXYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
-      "experiment_ref": {
-        "experiment_name": "CD-5678-CD-5678-SampleB-NovaSeq",
-        "project_id": "CD-5678",
-        "sample_id": "CD-5678-SampleB"
+      "experiment": {
+        "alias": "CD-5678-CD-5678-SampleB-NovaSeq",
+        "project": {
+          "project_id": "CD-5678"
+        },
+        "sample": {
+          "sample_id": "CD-5678-SampleB"
+        }
       },
       "platform": {
         "model_name": "NovaSeq"
