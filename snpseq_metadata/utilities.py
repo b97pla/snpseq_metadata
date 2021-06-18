@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from snpseq_metadata.exceptions import (
     NoSampleSheetDataFoundException,
     SampleSheetNotFoundException,
+    RunParametersNotFoundException,
 )
 
 
@@ -42,13 +43,27 @@ def parse_samplesheet_data(samplesheet: str) -> List[Dict[str, str]]:
         return [{key.lower(): value for key, value in row.items()} for row in reader]
 
 
-def find_samplesheet(search_path, suffix="samplesheet.csv") -> List[str]:
+def find_samplesheet(search_path: str, suffix: str = "samplesheet.csv") -> List[str]:
+    csvfiles = find_file(search_path, suffix)
+    if not csvfiles:
+        raise SampleSheetNotFoundException(search_path)
+    return csvfiles
+
+
+def find_run_parameters(
+    search_path: str, suffix: str = "runparameters.xml"
+) -> List[str]:
+    csvfiles = find_file(search_path, suffix)
+    if not csvfiles:
+        raise RunParametersNotFoundException(search_path)
+    return csvfiles
+
+
+def find_file(search_path: str, suffix: str) -> List[str]:
     csvfiles = list(
         filter(
             lambda f: f.lower().endswith(suffix),
             os.listdir(search_path),
         )
     )
-    if not csvfiles:
-        raise SampleSheetNotFoundException(search_path)
     return csvfiles

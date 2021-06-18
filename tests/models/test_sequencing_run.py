@@ -1,33 +1,16 @@
-from snpseq_metadata.models.sequencing_run import NGIUppsalaRun, SequencingRun
+from snpseq_metadata.models.ngi_models import NGIRun, NGIExperimentRef
 
 
-class TestSequencingRun:
-    def test_to_json(self):
-        run_alias = "this-is-a-run-alias"
-        run_center = "this-is-a-run-center"
-        run = SequencingRun(run_alias=run_alias, run_center=run_center)
-
-        expected_json = {
-            "@alias": run_alias,
-            "@run_center": run_center,
-            "EXPERIMENT_REF": {},
-            "DATA_BLOCK": {"FILES": {"FILE": []}},
-        }
-
-        assert run.to_json() == expected_json
-
-
-class TestNGIUppsalaRun:
+class TestNGIRun:
     def test_to_json(self):
         run_alias = "this-is-a-run-alias"
         run_center = "National Genomics Infrastructure, Uppsala"
-        run = NGIUppsalaRun(run_alias=run_alias)
-
-        expected_json = {
-            "@alias": run_alias,
-            "@run_center": run_center,
-            "EXPERIMENT_REF": {},
-            "DATA_BLOCK": {"FILES": {"FILE": []}},
-        }
-
-        assert run.to_json() == expected_json
+        experiment_name = "this-is-an-experiment-ref"
+        sample_project = "this-is-a-sample-project"
+        sample_id = "this-is-a-sample-id"
+        experiment_ref = NGIExperimentRef(
+            experiment_name=experiment_name,
+            project_id=sample_project,
+            sample_id=sample_id,
+        )
+        run = NGIRun(run_alias=run_alias, experiment_ref=experiment_ref)

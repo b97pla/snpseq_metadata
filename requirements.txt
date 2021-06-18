@@ -1,1 +1,3 @@
-xmlschema
+xsdata
+pytest
+click
