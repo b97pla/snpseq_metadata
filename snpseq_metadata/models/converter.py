@@ -41,6 +41,15 @@ T = TypeVar("T", bound="Converter")
 
 
 class Converter:
+    """
+    The main class for doing conversions between models. The idea is that the conversion is made by
+    calling the appropriate class method and supplying the model instance to convert from. This
+    pattern allows the models to be implemented independently of each other, i.e. the model modules
+    themselves need not know anything about any other model.
+
+    Example:
+        sra_library_instance = Converter.ngi_to_sra(ngi_library_instance)
+    """
 
     ngi_model_class: ClassVar[Type] = NGIMetadataModel
     sra_model_class: ClassVar[Type] = SRAMetadataModel
@@ -50,7 +59,17 @@ class Converter:
     def ngi_to_sra(
         cls: Type[T], ngi_model: ngi_model_class
     ) -> Optional[sra_model_class]:
-        # only recurse if this is called in the base class
+        """
+        Entry point to convert a NGI model class to a corresponding SRA model class. The method will
+        iterate over subclasses to locate a subclass whose ngi_model_class matches the supplied
+        ngi_model.
+
+        :param ngi_model: an instance of NGIMetadataModel or any of its subclasses
+        :return: an instance of a subclass of SRAMetadataModel, corresponding to the supplied
+        ngi_model or None if no matching conversion could be made
+        """
+        # iterate over all subclasses to find one whose ngi_nodel_class variable matches the
+        # supplied ngi_model, but only if this is called in the base class
         if cls == Converter:
             for subclass in cls.__subclasses__():
                 if isinstance(ngi_model, subclass.ngi_model_class):
@@ -62,7 +81,17 @@ class Converter:
     def lims_to_ngi(
         cls: Type[T], lims_model: lims_model_class
     ) -> Optional[ngi_model_class]:
-        # only recurse if this is called in the base class
+        """
+        Entry point to convert a LIMS model class to a corresponding NGI model class. The method
+        will iterate over subclasses to locate a subclass whose lims_model_class matches the
+        supplied lims_model.
+
+        :param lims_model: an instance of LIMSMetadataModel or any of its subclasses
+        :return: an instance of a subclass of NGIMetadataModel, corresponding to the supplied
+        lims_model or None if no matching conversion could be made
+        """
+        # iterate over all subclasses to find one whose lims_nodel_class variable matches the
+        # supplied lims_model, but only if this is called in the base class
         if cls == Converter:
             for subclass in cls.__subclasses__():
                 if isinstance(lims_model, subclass.lims_model_class):
@@ -72,6 +101,9 @@ class Converter:
 
 
 class ConvertSampleDescriptor(Converter):
+    """
+    Conversion between NGISampleDescriptor, SRASampleDescriptor and LIMSSample
+    """
 
     ngi_model_class = NGISampleDescriptor
     sra_model_class = SRASampleDescriptor
@@ -93,6 +125,9 @@ class ConvertSampleDescriptor(Converter):
 
 
 class ConvertStudyRef(Converter):
+    """
+    Conversion between NGIStudyRef, SRAStudyRef and LIMSSample
+    """
 
     ngi_model_class = NGIStudyRef
     sra_model_class = SRAStudyRef
@@ -114,6 +149,9 @@ class ConvertStudyRef(Converter):
 
 
 class ConvertRun(Converter):
+    """
+    Conversion between NGIRun and SRARun
+    """
 
     ngi_model_class = NGIRun
     sra_model_class = SRARun
@@ -135,6 +173,9 @@ class ConvertRun(Converter):
 
 
 class ConvertSequencingPlatform(Converter):
+    """
+    Conversion between NGIIlluminaSequencingPlatform, SRAIlluminaSequencingPlatform and LIMSSample
+    """
 
     ngi_model_class = NGIIlluminaSequencingPlatform
     sra_model_class = SRAIlluminaSequencingPlatform
@@ -158,6 +199,9 @@ class ConvertSequencingPlatform(Converter):
 
 
 class ConvertRunSet(Converter):
+    """
+    Conversion between NGIFlowcell and SRARunSet
+    """
 
     ngi_model_class = NGIFlowcell
     sra_model_class = SRARunSet
@@ -173,6 +217,9 @@ class ConvertRunSet(Converter):
 
 
 class ConvertResultFile(Converter):
+    """
+    Conversion between NGIResultFile and SRAResultFile
+    """
 
     ngi_model_class = NGIResultFile
     sra_model_class = SRAResultFile
@@ -191,6 +238,9 @@ class ConvertResultFile(Converter):
 
 
 class ConvertExperimentRef(Converter):
+    """
+    Conversion between NGIExperimentRef, SRAExperimentRef and LIMSSample
+    """
 
     ngi_model_class = NGIExperimentRef
     sra_model_class = SRAExperimentRef
@@ -216,6 +266,9 @@ class ConvertExperimentRef(Converter):
 
 
 class ConvertExperimentSet(Converter):
+    """
+    Conversion between NGIExperimentSet, SRAExperimentSet and LIMSSequencingContainer
+    """
 
     ngi_model_class = NGIExperimentSet
     sra_model_class = SRAExperimentSet
@@ -247,6 +300,9 @@ class ConvertExperimentSet(Converter):
 
 
 class ConvertLibrary(Converter):
+    """
+    Conversion between NGILibrary, SRALibrary and LIMSSample
+    """
 
     ngi_model_class = NGILibrary
     sra_model_class = SRALibrary
@@ -305,6 +361,19 @@ class ConvertLibrary(Converter):
     def objects_from_application_info(
         cls: Type[T], application: str, sample_type: str, library_kit: str
     ) -> Tuple[str, str, str]:
+        """
+        Look up the SRA values for library strategy, source and selection corresponding to the
+        supplied NGI application, sample_type and library_kit, by using the
+        ApplicationSampleTypeMapping class.
+
+        :param application: the sample application, specified in e.g. Clarity LIMS
+        :param sample_type: the sample type, specified in e.g. Clarity LIMS
+        :param library_kit: the library kit, specified in e.g. Clarity LIMS
+        :return: a tuple with the corresponding SRA library selection, library source and libnrary
+        strategy
+        :raises LibraryStrategyNotRecognizedException: if corresponding values could not be
+        determined
+        """
         mapping_obj = ApplicationSampleTypeMapping.create_object(
             application=application,
             sample_type=sample_type,
@@ -322,6 +391,9 @@ class ConvertLibrary(Converter):
 
 
 class ConvertExperiment(Converter):
+    """
+    Conversion between NGIExperiment, SRAExperiment and LIMSSample
+    """
 
     ngi_model_class = NGIExperiment
     sra_model_class = SRAExperiment

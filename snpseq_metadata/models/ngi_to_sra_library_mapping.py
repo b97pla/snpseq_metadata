@@ -10,6 +10,13 @@ T = TypeVar("T", bound="ApplicationSampleTypeMapping")
 
 
 class ApplicationSampleTypeMapping:
+    """
+    The ApplicationSampleTypeMapping is a base class that provides functionality for picking the
+    combination of SRA library selection, source and strategy corresponding to a combination of
+    NGI application, sample type and library prep. Only the create_object method on this base class
+    needs to be called. The base class will query its subclasses for a suitable match.
+    """
+
     ngi_application: Union[List[str], str]
     ngi_sample_type: Union[List[str], str]
     ngi_sample_prep_kit: Union[List[str], str]
