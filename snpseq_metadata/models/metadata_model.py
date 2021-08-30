@@ -9,10 +9,12 @@ T = TypeVar("T")
 
 class MetadataModel:
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, type(self)) and all(
+        return type(other) is type(self) and all(
             map(
                 lambda k: getattr(other, k, None) == getattr(self, k, None),
-                vars(self).keys(),
+                filter(
+                    lambda k: k not in ["model_object", "exporter"], vars(self).keys()
+                ),
             )
         )
 
@@ -23,7 +25,8 @@ class MetadataModel:
     def to_json(self) -> Dict:
         json_obj = {}
         for name, value in vars(self).items():
-            json_obj[name] = self._item_to_json(value)
+            if value is not None:
+                json_obj[name] = self._item_to_json(value)
         return json_obj
 
     @classmethod
@@ -37,7 +40,7 @@ class MetadataModel:
         if isinstance(item, Iterable):
             return [cls._item_to_json(i) for i in item]
         if isinstance(item, datetime.datetime):
-            return item.isoformat(" ")
+            return item.isoformat()
         return item
 
     @staticmethod
@@ -49,4 +52,4 @@ class MetadataModel:
         try:
             return haystack[needle.lower()]
         except KeyError:
-            on_error(needle, list(haystack.keys()))
+            raise on_error(needle, list(haystack.keys()))

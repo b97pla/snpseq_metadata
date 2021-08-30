@@ -52,11 +52,12 @@ class NGIExperimentRef(NGIExperimentBase):
     ) -> TR:
         project_id = samplesheet_row.get("sample_project")
         sample_id = samplesheet_row.get("sample_id")
-        alias = f"{project_id}-{sample_id}-{platform.model_name}"
+        sample_name = samplesheet_row.get("sample_name", sample_id)
+        alias = f"{project_id}-{sample_name}-{platform.model_name}"
         return cls(
             alias=alias,
             project=NGIStudyRef(project_id=project_id),
-            sample=NGISampleDescriptor(sample_id=sample_id),
+            sample=NGISampleDescriptor(sample_id=sample_name),
         )
 
     @classmethod
@@ -64,7 +65,7 @@ class NGIExperimentRef(NGIExperimentBase):
         return cls(
             alias=json_obj.get("alias"),
             project=NGIStudyRef.from_json(json_obj.get("project")),
-            sample_id=NGISampleDescriptor.from_json(json_obj.get("sample")),
+            sample=NGISampleDescriptor.from_json(json_obj.get("sample")),
         )
 
     def get_reference(self) -> TR:

@@ -35,15 +35,15 @@ class SRALibrary(SRAMetadataModel):
     def object_from_paired(
         cls: Type[T], is_paired: bool
     ) -> LibraryDescriptorType.LibraryLayout:
-        return (
-            LibraryDescriptorType.LibraryLayout(
+        if is_paired:
+            layout = LibraryDescriptorType.LibraryLayout(
                 paired=LibraryDescriptorType.LibraryLayout.Paired()
             )
-            if is_paired
-            else LibraryDescriptorType.LibraryLayout(
+        else:
+            layout = LibraryDescriptorType.LibraryLayout(
                 single=LibraryDescriptorType.LibraryLayout.Single()
             )
-        )
+        return layout
 
     @classmethod
     def object_from_source(cls: Type[T], source: str) -> TypeLibrarySource:
@@ -71,7 +71,7 @@ class SRALibrary(SRAMetadataModel):
 
     @staticmethod
     def _dict_from_enum(enum_cls: TLS) -> Dict[str, TLS]:
-        return {e.name.lower(): e for e in list(enum_cls)}
+        return {e.value.lower(): e for e in list(enum_cls)}
 
     @classmethod
     def create_object(
