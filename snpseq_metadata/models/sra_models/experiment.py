@@ -7,8 +7,9 @@ from snpseq_metadata.models.sra_models.library import SRALibrary
 from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
 from snpseq_metadata.models.sra_models.study import SRAStudyRef
 from snpseq_metadata.models.xsdata import (
-    Run,
-    ExperimentType as XSDExperiment,
+    RefObjectType,
+    RunType as Run,
+    Experiment,
     ExperimentSet as XSDExperimentSet,
 )
 
@@ -33,14 +34,15 @@ class SRAExperimentBase(SRAMetadataModel):
 
 
 class SRAExperimentRef(SRAExperimentBase):
-    model_object_class: ClassVar[Type] = Run.ExperimentRef
+    model_object_class: ClassVar[Type] = RefObjectType
+    model_object_parent_field: ClassVar[Optional[Tuple[Type, str]]] = (Run, "experiment_ref")
 
     def __str__(self) -> str:
         return self.model_object.refname
 
     @classmethod
     def create_object(cls: Type[TR], experiment_name: str) -> TR:
-        model_object = Run.ExperimentRef(refname=experiment_name)
+        model_object = cls.model_object_class(refname=experiment_name)
         return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
@@ -59,7 +61,7 @@ class SRAExperimentRef(SRAExperimentBase):
 
 
 class SRAExperiment(SRAExperimentBase):
-    model_object_class: ClassVar[Type] = XSDExperiment
+    model_object_class: ClassVar[Type] = Experiment
 
     def __init__(
         self,
@@ -82,7 +84,7 @@ class SRAExperiment(SRAExperimentBase):
         platform: SRASequencingPlatform,
         library: SRALibrary,
     ) -> T:
-        model_object = XSDExperiment(
+        model_object = cls.model_object_class(
             title=title,
             alias=alias,
             study_ref=study_ref.model_object,
@@ -120,7 +122,7 @@ class SRAExperimentSet(SRAMetadataModel):
 
     @classmethod
     def create_object(cls: Type[TS], experiments: List[SRAExperiment]) -> TS:
-        model_object = XSDExperimentSet(
+        model_object = cls.model_object_class(
             experiment=[experiment.model_object for experiment in experiments]
         )
         return cls(model_object=model_object, experiments=experiments)

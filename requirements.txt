@@ -1,2 +1,0 @@
-xsdata[cli]==21.4
-click
