@@ -41,7 +41,7 @@ class SRALibrary(SRAMetadataModel):
             )
         else:
             layout = LibraryDescriptorType.LibraryLayout(
-                single=True
+                single=""
             )
         return layout
 
