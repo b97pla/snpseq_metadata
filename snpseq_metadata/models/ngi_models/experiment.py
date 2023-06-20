@@ -47,18 +47,27 @@ class NGIExperimentRef(NGIExperimentBase):
         self.sample = sample
 
     @classmethod
-    def from_samplesheet_row(
-        cls: Type[TR], samplesheet_row: Dict, platform: NGIIlluminaSequencingPlatform
-    ) -> TR:
+    def from_samplesheet_row(cls: Type[TR], samplesheet_row: Dict) -> TR:
         project_id = samplesheet_row.get("sample_project")
-        sample_id = samplesheet_row.get("sample_id")
-        sample_name = samplesheet_row.get("sample_name", sample_id)
-        alias = f"{project_id}-{sample_name}-{platform.model_name}"
+        sample_library_id = samplesheet_row.get("sample_id")
+        sample_name = samplesheet_row.get(
+            "sample_name",
+            sample_library_id.replace("Sample_", ""))
+        sample_library_tag = "+".join(
+            filter(
+                lambda x: x,
+                [
+                    samplesheet_row.get("index"),
+                    samplesheet_row.get("index2")]))
+        sample = NGISampleDescriptor(
+            sample_id=sample_name,
+            sample_library_id=sample_library_id,
+            sample_library_tag=sample_library_tag)
+        alias = f"{project_id}-{sample.sample_alias}"
         return cls(
             alias=alias,
             project=NGIStudyRef(project_id=project_id),
-            sample=NGISampleDescriptor(sample_id=sample_name),
-        )
+            sample=sample)
 
     @classmethod
     def from_json(cls: Type[TR], json_obj: Dict) -> TR:

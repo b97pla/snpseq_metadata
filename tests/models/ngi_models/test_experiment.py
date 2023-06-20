@@ -26,12 +26,14 @@ class TestNGIExperimentBase:
 
 class TestNGIExperimentRef:
     def test_from_samplesheet_row(
-        self, samplesheet_row, ngi_illumina_platform_obj, ngi_experiment_ref_obj
+        self, samplesheet_row, ngi_flowcell_obj, ngi_experiment_ref_obj
     ):
         experiment_ref = NGIExperimentRef.from_samplesheet_row(
-            samplesheet_row=samplesheet_row, platform=ngi_illumina_platform_obj
+            samplesheet_row=samplesheet_row, flowcell_id=ngi_flowcell_obj.flowcell_id
         )
-        ngi_experiment_ref_obj.alias = f"{ngi_experiment_ref_obj.project.project_id}-{ngi_experiment_ref_obj.sample.sample_id}-{ngi_illumina_platform_obj.model_name}"
+        ngi_experiment_ref_obj.alias = f"{ngi_experiment_ref_obj.project.project_id}-" \
+                                       f"{ngi_experiment_ref_obj.sample.sample_id}-" \
+                                       f"{ngi_flowcell_obj.flowcell_id}"
         assert experiment_ref == ngi_experiment_ref_obj
 
     def test_from_json(self, ngi_experiment_ref_obj, ngi_experiment_ref_json):

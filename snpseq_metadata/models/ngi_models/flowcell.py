@@ -89,8 +89,8 @@ class NGIFlowcell(NGIMetadataModel):
                 f"Project_{experiment_ref.project.project_id}",
             ],
             [
-                experiment_ref.sample.sample_id,
-                f"Sample_{experiment_ref.sample.sample_id}",
+                experiment_ref.sample.sample_library_id,
+                f"Sample_{experiment_ref.sample.sample_library_id}",
             ],
         ]
         try:
@@ -120,9 +120,7 @@ class NGIFlowcell(NGIMetadataModel):
         )
         experiments = []
         for samplesheet_row in samplesheet_data:
-            experiment = NGIExperimentRef.from_samplesheet_row(
-                samplesheet_row, self.platform
-            )
+            experiment = NGIExperimentRef.from_samplesheet_row(samplesheet_row)
             if all(
                 [
                     experiment not in experiments,
@@ -147,12 +145,15 @@ class NGIFlowcell(NGIMetadataModel):
         ):
             fastqpath = os.path.join(fastqdir, fastqfile)
             querypath = os.path.relpath(fastqpath, os.path.dirname(self.runfolder_path))
-            try:
-                checksum = snpseq_metadata.utilities.lookup_checksum_from_file(
-                    checksumfile=self.get_checksumfile(), querypath=querypath
-                )
-            except OSError:
-                checksum = None
+            checksum = None
+            checksum_file = self.get_checksumfile()
+            if checksum_file:
+                try:
+                    checksum = snpseq_metadata.utilities.lookup_checksum_from_file(
+                        checksumfile=checksum_file, querypath=querypath
+                    )
+                except OSError:
+                    pass
             if checksum is None:
                 checksum = snpseq_metadata.utilities.calculate_checksum_from_file(
                     queryfile=fastqpath, method=self.checksum_method
@@ -182,7 +183,7 @@ class NGIFlowcell(NGIMetadataModel):
             fastqfiles = []
 
         return NGIRun(
-            run_alias=f"{experiment_ref.project.project_id}-{experiment_ref.sample.sample_id}-{self.flowcell_id}",
+            run_alias=f"{experiment_ref.project.project_id}-{experiment_ref.sample.sample_alias}",
             experiment=experiment_ref,
             platform=self.platform,
             run_date=self.run_date,
