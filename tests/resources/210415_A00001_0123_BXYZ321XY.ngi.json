@@ -1,7 +1,7 @@
 {
   "runfolder_path": "tests/resources/210415_A00001_0123_BXYZ321XY",
   "runfolder_name": "210415_A00001_0123_BXYZ321XY",
-  "flowcell_id": "BXYZ321XY",
+  "flowcell_id": "XYZ321XY",
   "samplesheet": "fc_SampleSheet.csv",
   "run_parameters": "RunParameters.xml",
   "checksum_method": "MD5",
@@ -11,15 +11,17 @@
   "run_date": "2021-04-15T00:00:00",
   "sequencing_runs": [
     {
-      "run_alias": "AB-1234-AB-1234-SampleA-1-BXYZ321XY",
+      "run_alias": "AB-1234-AB-1234-SampleA-1-Sample_AB-1234-SampleA-1-CCGCGGTT+CTAGCGCT-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "AB-1234-AB-1234-SampleA-1-NovaSeq",
+        "alias": "AB-1234-AB-1234-SampleA-1-Sample_AB-1234-SampleA-1-CCGCGGTT+CTAGCGCT",
         "project": {
           "project_id": "AB-1234"
         },
         "sample": {
-          "sample_id": "AB-1234-SampleA-1"
+          "sample_id": "AB-1234-SampleA-1",
+          "sample_library_id": "Sample_AB-1234-SampleA-1",
+          "sample_library_tag": "CCGCGGTT+CTAGCGCT"
         }
       },
       "platform": {
@@ -54,15 +56,17 @@
       ]
     },
     {
-      "run_alias": "AB-1234-AB-1234-SampleA-2-BXYZ321XY",
+      "run_alias": "AB-1234-AB-1234-SampleA-2-Sample_AB-1234-SampleA-2-TTATAACC+TCGATATC-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "AB-1234-AB-1234-SampleA-2-NovaSeq",
+        "alias": "AB-1234-AB-1234-SampleA-2-Sample_AB-1234-SampleA-2-TTATAACC+TCGATATC",
         "project": {
           "project_id": "AB-1234"
         },
         "sample": {
-          "sample_id": "AB-1234-SampleA-2"
+          "sample_id": "AB-1234-SampleA-2",
+          "sample_library_id": "Sample_AB-1234-SampleA-2",
+          "sample_library_tag": "TTATAACC+TCGATATC"
         }
       },
       "platform": {
@@ -97,15 +101,17 @@
       ]
     },
     {
-      "run_alias": "AB-1234-AB-1234-SampleB-BXYZ321XY",
+      "run_alias": "AB-1234-AB-1234-SampleB-Sample_AB-1234-SampleB-GGACTTGG+CGTCTGCG-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "AB-1234-AB-1234-SampleB-NovaSeq",
+        "alias": "AB-1234-AB-1234-SampleB-Sample_AB-1234-SampleB-GGACTTGG+CGTCTGCG",
         "project": {
           "project_id": "AB-1234"
         },
         "sample": {
-          "sample_id": "AB-1234-SampleB"
+          "sample_id": "AB-1234-SampleB",
+          "sample_library_id": "Sample_AB-1234-SampleB",
+          "sample_library_tag": "GGACTTGG+CGTCTGCG"
         }
       },
       "platform": {
@@ -140,15 +146,17 @@
       ]
     },
     {
-      "run_alias": "CD-5678-CD-5678-SampleA-1-BXYZ321XY",
+      "run_alias": "CD-5678-CD-5678-SampleA-1-CD-5678-SampleA-1-AAGTCCAA+TACTCATA-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "CD-5678-CD-5678-SampleA-1-NovaSeq",
+        "alias": "CD-5678-CD-5678-SampleA-1-CD-5678-SampleA-1-AAGTCCAA+TACTCATA",
         "project": {
           "project_id": "CD-5678"
         },
         "sample": {
-          "sample_id": "CD-5678-SampleA-1"
+          "sample_id": "CD-5678-SampleA-1",
+          "sample_library_id": "CD-5678-SampleA-1",
+          "sample_library_tag": "AAGTCCAA+TACTCATA"
         }
       },
       "platform": {
@@ -183,15 +191,17 @@
       ]
     },
     {
-      "run_alias": "CD-5678-CD-5678-SampleA-2-BXYZ321XY",
+      "run_alias": "CD-5678-CD-5678-SampleA-2-CD-5678-SampleA-2-ATCCACTG+ACGCACCT-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "CD-5678-CD-5678-SampleA-2-NovaSeq",
+        "alias": "CD-5678-CD-5678-SampleA-2-CD-5678-SampleA-2-ATCCACTG+ACGCACCT",
         "project": {
           "project_id": "CD-5678"
         },
         "sample": {
-          "sample_id": "CD-5678-SampleA-2"
+          "sample_id": "CD-5678-SampleA-2",
+          "sample_library_id": "CD-5678-SampleA-2",
+          "sample_library_tag": "ATCCACTG+ACGCACCT"
         }
       },
       "platform": {
@@ -226,15 +236,17 @@
       ]
     },
     {
-      "run_alias": "CD-5678-CD-5678-SampleB-BXYZ321XY",
+      "run_alias": "CD-5678-CD-5678-SampleB-CD-5678-SampleB-GCTTGTCA+GTATGTTC-XYZ321XY",
       "run_center": "National Genomics Infrastructure, Uppsala",
       "experiment": {
-        "alias": "CD-5678-CD-5678-SampleB-NovaSeq",
+        "alias": "CD-5678-CD-5678-SampleB-CD-5678-SampleB-GCTTGTCA+GTATGTTC",
         "project": {
           "project_id": "CD-5678"
         },
         "sample": {
-          "sample_id": "CD-5678-SampleB"
+          "sample_id": "CD-5678-SampleB",
+          "sample_library_id": "CD-5678-SampleB",
+          "sample_library_tag": "GCTTGTCA+GTATGTTC"
         }
       },
       "platform": {
