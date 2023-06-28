@@ -14,7 +14,9 @@ class NGISampleDescriptor(NGIMetadataModel):
         self.sample_id = sample_id
         self.sample_library_id = sample_library_id
         self.sample_library_tag = sample_library_tag
-        self.sample_alias = "-".join(
+
+    def sample_alias(self):
+        return "-".join(
             filter(
                 lambda x: x,
                 [

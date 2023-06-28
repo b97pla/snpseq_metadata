@@ -1,6 +1,7 @@
 import os
 import datetime
 import logging
+import re
 from typing import Dict, List, Optional, Type, TypeVar
 
 import snpseq_metadata.utilities
@@ -29,7 +30,7 @@ class NGIFlowcell(NGIMetadataModel):
     ) -> None:
         self.runfolder_path = runfolder_path
         self.runfolder_name = os.path.basename(self.runfolder_path)
-        self.flowcell_id = self.runfolder_name.split("_")[-1]
+        self.flowcell_id = self.get_flowcell_id_from_runfolder_name(self.runfolder_name)
         self.samplesheet = (
             os.path.basename(samplesheet)
             if samplesheet
@@ -48,6 +49,13 @@ class NGIFlowcell(NGIMetadataModel):
         self.sequencing_runs = (
             sequencing_runs if sequencing_runs else self.get_sequencing_runs()
         )
+
+    @staticmethod
+    def get_flowcell_id_from_runfolder_name(runfolder_name: str) -> str:
+        pattern = r"^((?:20)?\d{2}[01]\d[0123]\d)_([A-Z]+\d+)_(\d+)_([A-Z]?)([A-Z0-9-]+)$"
+        m = re.match(pattern, runfolder_name)
+        if m.groups():
+            return m.group(5)
 
     def get_run_date(self) -> Optional[datetime.datetime]:
         datestr = self.runfolder_name.split("_")[0]
@@ -89,8 +97,9 @@ class NGIFlowcell(NGIMetadataModel):
                 f"Project_{experiment_ref.project.project_id}",
             ],
             [
-                experiment_ref.sample.sample_library_id,
-                f"Sample_{experiment_ref.sample.sample_library_id}",
+                experiment_ref.sample.sample_library_id or experiment_ref.sample.sample_id,
+                f"Sample_"
+                f"{experiment_ref.sample.sample_library_id or experiment_ref.sample.sample_id}"
             ],
         ]
         try:
@@ -183,7 +192,7 @@ class NGIFlowcell(NGIMetadataModel):
             fastqfiles = []
 
         return NGIRun(
-            run_alias=f"{experiment_ref.project.project_id}-{experiment_ref.sample.sample_alias}",
+            run_alias=f"{experiment_ref.alias}-{self.flowcell_id}",
             experiment=experiment_ref,
             platform=self.platform,
             run_date=self.run_date,

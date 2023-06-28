@@ -183,7 +183,10 @@ class ConvertSampleDescriptor(Converter):
         cls: Type[T], lims_model: lims_model_class
     ) -> Optional[ngi_model_class]:
         if lims_model:
-            return cls.ngi_model_class(sample_id=lims_model.sample_id)
+            # will only pass sample_id for now but should really figure out how to pass a library
+            # specification identifier
+            return cls.ngi_model_class(
+                sample_id=lims_model.sample_id)
 
 
 class ConvertStudyRef(Converter):
@@ -335,8 +338,14 @@ class ConvertExperimentRef(Converter):
             sample = ConvertSampleDescriptor.lims_to_ngi(lims_model=lims_model)
             project = ConvertStudyRef.lims_to_ngi(lims_model=lims_model)
             platform = ConvertSequencingPlatform.lims_to_ngi(lims_model=lims_model)
+            # this alias should ideally be the same regardless if it's created from the LIMS
+            # object or from the NGI object. Currently, it's not straightforward since there's not
+            # enough specific information
             alias = f"{project.project_id}-{sample.sample_id}-{platform.model_name}"
-            return cls.ngi_model_class(alias=alias, sample=sample, project=project)
+            return cls.ngi_model_class(
+                alias=alias,
+                sample=sample,
+                project=project)
 
 
 class ConvertExperimentSet(Converter):
@@ -370,7 +379,9 @@ class ConvertExperimentSet(Converter):
             experiments = []
             for lims_sample in lims_model.samples or []:
                 try:
-                    experiment = ConvertExperiment.lims_to_ngi(lims_model=lims_sample)
+                    experiment = ConvertExperiment.lims_to_ngi(
+                        lims_model=lims_sample
+                    )
                     if experiment is not None:
                         experiments.append(experiment)
                 except ModelConversionException as ex:
@@ -499,7 +510,7 @@ class ConvertExperiment(Converter):
             sample = ConvertSampleDescriptor.lims_to_ngi(lims_model=lims_model)
             project = ConvertStudyRef.lims_to_ngi(lims_model=lims_model)
             platform = ConvertSequencingPlatform.lims_to_ngi(lims_model=lims_model)
-            alias = f"{project.project_id}-{sample.sample_id}-{platform.model_name}"
+            alias = f"{project.project_id}-{sample.sample_alias()}"
             library = ConvertLibrary.lims_to_ngi(lims_model=lims_model)
             title = f"{project.project_id} - " \
                     f"{sample.sample_id} - " \

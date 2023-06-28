@@ -47,7 +47,9 @@ class NGIExperimentRef(NGIExperimentBase):
         self.sample = sample
 
     @classmethod
-    def from_samplesheet_row(cls: Type[TR], samplesheet_row: Dict) -> TR:
+    def from_samplesheet_row(
+            cls: Type[TR],
+            samplesheet_row: Dict) -> TR:
         project_id = samplesheet_row.get("sample_project")
         sample_library_id = samplesheet_row.get("sample_id")
         sample_name = samplesheet_row.get(
@@ -58,12 +60,12 @@ class NGIExperimentRef(NGIExperimentBase):
                 lambda x: x,
                 [
                     samplesheet_row.get("index"),
-                    samplesheet_row.get("index2")]))
+                    samplesheet_row.get("index2")])) or None
         sample = NGISampleDescriptor(
             sample_id=sample_name,
             sample_library_id=sample_library_id,
             sample_library_tag=sample_library_tag)
-        alias = f"{project_id}-{sample.sample_alias}"
+        alias = f"{project_id}-{sample.sample_alias()}"
         return cls(
             alias=alias,
             project=NGIStudyRef(project_id=project_id),

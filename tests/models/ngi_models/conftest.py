@@ -61,14 +61,14 @@ def samplesheet_rows():
 
 
 @pytest.fixture
-def samplesheet_experiment_refs(ngi_flowcell_obj, samplesheet_rows):
-    return [
-        NGIExperimentRef(
-            alias=f"{row['sample_project']}-"
-                  f"{row['sample_name']}-"
-                  f"{ngi_flowcell_obj.flowcell_id}",
-            project=NGIStudyRef(project_id=row["sample_project"]),
-            sample=NGISampleDescriptor(sample_id=row["sample_name"]),
+def samplesheet_experiment_refs(samplesheet_rows):
+    experiment_refs = []
+    for row in samplesheet_rows:
+        project = NGIStudyRef(project_id=row["sample_project"])
+        sample = NGISampleDescriptor(
+            sample_id=row["sample_name"],
+            sample_library_id=row["sample_id"]
         )
-        for row in samplesheet_rows
-    ]
+        alias = f"{project.project_id}-{sample.sample_alias()}"
+        experiment_refs.append(NGIExperimentRef(alias=alias, project=project, sample=sample))
+    return experiment_refs

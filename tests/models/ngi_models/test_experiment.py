@@ -26,14 +26,17 @@ class TestNGIExperimentBase:
 
 class TestNGIExperimentRef:
     def test_from_samplesheet_row(
-        self, samplesheet_row, ngi_flowcell_obj, ngi_experiment_ref_obj
+        self, samplesheet_row, ngi_experiment_ref_obj
     ):
         experiment_ref = NGIExperimentRef.from_samplesheet_row(
-            samplesheet_row=samplesheet_row, flowcell_id=ngi_flowcell_obj.flowcell_id
+            samplesheet_row=samplesheet_row
         )
-        ngi_experiment_ref_obj.alias = f"{ngi_experiment_ref_obj.project.project_id}-" \
-                                       f"{ngi_experiment_ref_obj.sample.sample_id}-" \
-                                       f"{ngi_flowcell_obj.flowcell_id}"
+        # NGIExperimentRef.from_samplesheet_row will create an alias field based on project and
+        # sample, which does not match the reference object, so let's adjust for that
+        ngi_experiment_ref_obj.alias = experiment_ref.alias
+        # also, the sample object created by NGIExperimentRef.from_samplesheet_row will have a
+        # default value for sample_library_id, so let's copy that
+        ngi_experiment_ref_obj.sample.sample_library_id = experiment_ref.sample.sample_library_id
         assert experiment_ref == ngi_experiment_ref_obj
 
     def test_from_json(self, ngi_experiment_ref_obj, ngi_experiment_ref_json):

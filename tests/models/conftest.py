@@ -14,7 +14,12 @@ def ignore_xml_namespace_attributes(xml_str):
 
 
 @pytest.fixture
-def test_values(run_date):
+def flowcell_id():
+    return "ABC123XYZ"
+
+
+@pytest.fixture
+def test_values(run_date, flowcell_id):
     return {
         "study_refname": "this-is-a-project-id",
         "sample_refname": "this-is-a-sample-id",
@@ -40,8 +45,9 @@ def test_values(run_date):
         "platform_model_name": "this-is-a-platform-model-name",
         "samplesheet": "this-is-the-samplesheet-file",
         "run_parameters": "this-is-the-run-parameters-file",
+        "flowcell_id": flowcell_id,
         "runfolder_path": os.path.join("/this", "is", "a", "runfolder", "path"),
-        "runfolder_name": f"{run_date.strftime('%y%m%d')}_A00123_0001_AABC123XYZ",
+        "runfolder_name": f"{run_date.strftime('%y%m%d')}_A00123_0001_A{flowcell_id}",
         "run_date": run_date.isoformat(),
         "container_name": "this-is-a-sequencing-container-name",
     }
@@ -121,9 +127,9 @@ def ngi_experiment_ref_json(test_values, ngi_study_json, ngi_sample_json):
 
 
 @pytest.fixture
-def ngi_experiment_ref_obj(ngi_experiment_ref_json, ngi_study_obj, ngi_sample_obj):
+def ngi_experiment_ref_obj(test_values, ngi_study_obj, ngi_sample_obj):
     return NGIExperimentRef(
-        alias=ngi_experiment_ref_json["alias"],
+        alias=test_values["experiment_refname"],
         project=ngi_study_obj,
         sample=ngi_sample_obj,
     )
@@ -307,12 +313,14 @@ def ngi_sequencing_run_obj(
 
 @pytest.fixture
 def ngi_sample_json(test_values):
-    return {"sample_id": test_values["sample_refname"]}
+    return {
+        "sample_id": test_values["sample_refname"]}
 
 
 @pytest.fixture
 def ngi_sample_obj(ngi_sample_json):
-    return NGISampleDescriptor(sample_id=ngi_sample_json["sample_id"])
+    return NGISampleDescriptor(
+        sample_id=ngi_sample_json["sample_id"])
 
 
 @pytest.fixture

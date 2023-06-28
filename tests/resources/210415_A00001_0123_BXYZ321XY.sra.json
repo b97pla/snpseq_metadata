@@ -2,9 +2,9 @@
   "RUN": [
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "AB-1234-AB-1234-SampleA-1-BXYZ321XY",
+      "TITLE": "AB-1234-AB-1234-SampleA-1-Sample_AB-1234-SampleA-1-CCGCGGTT+CTAGCGCT-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "AB-1234-AB-1234-SampleA-1-NovaSeq"
+        "refname": "AB-1234-AB-1234-SampleA-1-Sample_AB-1234-SampleA-1-CCGCGGTT+CTAGCGCT"
       },
       "DATA_BLOCK": {
         "FILES": {
@@ -41,9 +41,9 @@
     },
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "AB-1234-AB-1234-SampleA-2-BXYZ321XY",
+      "TITLE": "AB-1234-AB-1234-SampleA-2-Sample_AB-1234-SampleA-2-TTATAACC+TCGATATC-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "AB-1234-AB-1234-SampleA-2-NovaSeq"
+        "refname": "AB-1234-AB-1234-SampleA-2-Sample_AB-1234-SampleA-2-TTATAACC+TCGATATC"
       },
       "DATA_BLOCK": {
         "FILES": {
@@ -80,9 +80,9 @@
     },
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "AB-1234-AB-1234-SampleB-BXYZ321XY",
+      "TITLE": "AB-1234-AB-1234-SampleB-Sample_AB-1234-SampleB-GGACTTGG+CGTCTGCG-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "AB-1234-AB-1234-SampleB-NovaSeq"
+        "refname": "AB-1234-AB-1234-SampleB-Sample_AB-1234-SampleB-GGACTTGG+CGTCTGCG"
       },
       "DATA_BLOCK": {
         "FILES": {
@@ -119,9 +119,9 @@
     },
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "CD-5678-CD-5678-SampleA-1-BXYZ321XY",
+      "TITLE": "CD-5678-CD-5678-SampleA-1-CD-5678-SampleA-1-AAGTCCAA+TACTCATA-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "CD-5678-CD-5678-SampleA-1-NovaSeq"
+        "refname": "CD-5678-CD-5678-SampleA-1-CD-5678-SampleA-1-AAGTCCAA+TACTCATA"
       },
       "DATA_BLOCK": {
         "FILES": {
@@ -158,9 +158,9 @@
     },
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "CD-5678-CD-5678-SampleA-2-BXYZ321XY",
+      "TITLE": "CD-5678-CD-5678-SampleA-2-CD-5678-SampleA-2-ATCCACTG+ACGCACCT-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "CD-5678-CD-5678-SampleA-2-NovaSeq"
+        "refname": "CD-5678-CD-5678-SampleA-2-CD-5678-SampleA-2-ATCCACTG+ACGCACCT"
       },
       "DATA_BLOCK": {
         "FILES": {
@@ -197,9 +197,9 @@
     },
     {
       "center_name": "National Genomics Infrastructure, Uppsala",
-      "TITLE": "CD-5678-CD-5678-SampleB-BXYZ321XY",
+      "TITLE": "CD-5678-CD-5678-SampleB-CD-5678-SampleB-GCTTGTCA+GTATGTTC-XYZ321XY",
       "EXPERIMENT_REF": {
-        "refname": "CD-5678-CD-5678-SampleB-NovaSeq"
+        "refname": "CD-5678-CD-5678-SampleB-CD-5678-SampleB-GCTTGTCA+GTATGTTC"
       },
       "DATA_BLOCK": {
         "FILES": {

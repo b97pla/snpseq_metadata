@@ -41,6 +41,7 @@ class TestConvertRun:
         sra_sequencing_run_obj.experiment = (
             sra_sequencing_run_obj.experiment.get_reference()
         )
+        obj = Converter.ngi_to_sra(ngi_model=ngi_sequencing_run_obj)
         assert (
             Converter.ngi_to_sra(ngi_model=ngi_sequencing_run_obj)
             == sra_sequencing_run_obj
