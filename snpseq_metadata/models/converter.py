@@ -15,6 +15,7 @@ from snpseq_metadata.models.ngi_models import (
     NGIExperiment,
     NGIExperimentSet,
     NGILibrary,
+    NGIAttribute
 )
 from snpseq_metadata.models.sra_models import (
     SRAMetadataModel,
@@ -28,6 +29,7 @@ from snpseq_metadata.models.sra_models import (
     SRAExperiment,
     SRAExperimentSet,
     SRALibrary,
+    SRAAttribute
 )
 
 from snpseq_metadata.models.lims_models import (
@@ -237,6 +239,10 @@ class ConvertRun(Converter):
                 fastqfiles=[
                     Converter.ngi_to_sra(n) for n in ngi_model.fastqfiles or []
                 ],
+                run_attributes=[
+                    Converter.ngi_to_sra(run_attribute)
+                    for run_attribute in ngi_model.run_attributes or []
+                ] or None
             )
 
 
@@ -523,4 +529,25 @@ class ConvertExperiment(Converter):
                 project=project,
                 platform=platform,
                 library=library,
+            )
+
+
+class ConvertAttribute(Converter):
+    """
+    Conversion between NGIAttribute and SRAAttribute
+    """
+
+    ngi_model_class = NGIAttribute
+    sra_model_class = SRAAttribute
+
+    @classmethod
+    @catch_exception
+    def ngi_to_sra(
+        cls: Type[T], ngi_model: ngi_model_class
+    ) -> Optional[sra_model_class]:
+        if ngi_model:
+            return cls.sra_model_class.create_object(
+                tag=ngi_model.tag,
+                value=ngi_model.value,
+                units=ngi_model.units
             )

@@ -2,9 +2,10 @@ from typing import ClassVar, List, Optional, TypeVar, Type, Tuple
 import datetime
 from xsdata.models.datatype import XmlDateTime
 
-from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
+from snpseq_metadata.models.sra_models.attribute import SRAAttribute
 from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase
 from snpseq_metadata.models.sra_models.file_models import SRAFastqFile
+from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
 from snpseq_metadata.models.xsdata import Run
 
 T = TypeVar("T", bound="SRARun")
@@ -30,6 +31,7 @@ class SRARun(SRAMetadataModel):
         experiment: SRAExperimentBase,
         run_center: str,
         fastqfiles: List[SRAFastqFile],
+        run_attributes: Optional[List[SRAAttribute]] = None,
         run_date: Optional[datetime.datetime] = None,
     ) -> T:
         xsd_files = Run.DataBlock.Files(
@@ -37,13 +39,18 @@ class SRARun(SRAMetadataModel):
         )
         xsd_data_block = Run.DataBlock(files=xsd_files)
         xsd_run_date = XmlDateTime.from_datetime(run_date) if run_date else None
+        xsd_run_attributes = Run.RunAttributes(
+            run_attribute=[
+                run_attribute.model_object for run_attribute in run_attributes]
+        ) if run_attributes else None
         model_object = cls.model_object_class(
             title=run_alias,
             run_center=run_center,
             run_date=xsd_run_date,
             center_name=run_center,
             experiment_ref=experiment.get_reference().model_object,
-            data_block=xsd_data_block
+            data_block=xsd_data_block,
+            run_attributes=xsd_run_attributes
         )
         return cls(
             model_object=model_object,
