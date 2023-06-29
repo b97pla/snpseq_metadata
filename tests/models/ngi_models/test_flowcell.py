@@ -5,6 +5,7 @@ import uuid
 import snpseq_metadata.utilities
 from snpseq_metadata.exceptions import FastqFileLocationNotFoundException
 from snpseq_metadata.models.ngi_models import (
+    NGIAttribute,
     NGIFlowcell,
     NGIIlluminaSequencingPlatform,
     NGIRun,
@@ -95,8 +96,14 @@ class TestNGIFlowcell:
         )
 
     def test_get_sequencing_run_for_experiment_ref(
-        self, ngi_flowcell_obj, ngi_experiment_ref_obj, ngi_fastq_file_obj, monkeypatch
-    ):
+            self,
+            ngi_flowcell_obj,
+            ngi_experiment_ref_obj,
+            ngi_fastq_file_obj,
+            ngi_study_obj,
+            ngi_sample_obj,
+            monkeypatch):
+
         def fastqfiles(**kwargs):
             return [ngi_fastq_file_obj, ngi_fastq_file_obj]
 
@@ -106,6 +113,10 @@ class TestNGIFlowcell:
             platform=ngi_flowcell_obj.platform,
             run_date=ngi_flowcell_obj.run_date,
             fastqfiles=fastqfiles(),
+            run_attributes=[
+                NGIAttribute(tag="project_id", value=ngi_study_obj.project_id),
+                NGIAttribute(tag="sample_id", value=ngi_sample_obj.sample_id)
+            ]
         )
 
         monkeypatch.setattr(

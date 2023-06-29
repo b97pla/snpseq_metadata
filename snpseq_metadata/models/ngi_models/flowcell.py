@@ -6,6 +6,7 @@ from typing import Dict, List, Optional, Type, TypeVar
 
 import snpseq_metadata.utilities
 from snpseq_metadata.exceptions import FastqFileLocationNotFoundException
+from snpseq_metadata.models.ngi_models.attribute import NGIAttribute
 from snpseq_metadata.models.ngi_models.metadata_model import NGIMetadataModel
 from snpseq_metadata.models.ngi_models.experiment import NGIExperimentRef, NGIExperiment
 from snpseq_metadata.models.ngi_models.file_models import NGIFastqFile
@@ -191,12 +192,22 @@ class NGIFlowcell(NGIMetadataModel):
             log.warning(ex)
             fastqfiles = []
 
+        run_attribute = [
+            NGIAttribute(
+                tag="project_id",
+                value=experiment_ref.project.project_id
+            ),
+            NGIAttribute(
+                tag="sample_id",
+                value=experiment_ref.sample.sample_id
+            )]
         return NGIRun(
             run_alias=f"{experiment_ref.alias}-{self.flowcell_id}",
             experiment=experiment_ref,
             platform=self.platform,
             run_date=self.run_date,
             fastqfiles=fastqfiles,
+            run_attributes=run_attribute
         )
 
     def get_sequencing_run_for_experiment(
