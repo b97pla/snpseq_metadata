@@ -17,7 +17,7 @@ class TestSRAStudyRef:
                sra_study_xml.split()
 
     def test___str__(self, sra_study_obj):
-        assert str(sra_study_obj) == sra_study_obj.model_object.refname
+        assert str(sra_study_obj) == sra_study_obj.refname
 
     def test___eq__(self, sra_study_obj):
         other_obj = SRAStudyRef.create_object(refname=str(sra_study_obj))

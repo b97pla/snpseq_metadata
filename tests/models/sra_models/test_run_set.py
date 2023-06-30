@@ -34,18 +34,18 @@ class TestSRARunSet:
     def _create_run_with_attributes(
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
-            sra_study_json,
-            sra_sample_json):
+            sra_study_obj,
+            sra_sample_obj):
         # first, set the run attributes for project_id and sample_id on the run objects
         run_attributes = {
             "RUN_ATTRIBUTE": [
                 {
                     "TAG": "project_id",
-                    "VALUE": sra_study_json["refname"]
+                    "VALUE": sra_study_obj.refname
                 },
                 {
                     "TAG": "sample_id",
-                    "VALUE": sra_sample_json["refname"]
+                    "VALUE": sra_sample_obj.refname
                 }
             ]
         }
@@ -62,16 +62,16 @@ class TestSRARunSet:
             self,
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
-            sra_study_json,
-            sra_sample_json,
+            sra_study_obj,
+            sra_sample_obj,
             sra_experiment_set_obj
     ):
 
         run_obj = self._create_run_with_attributes(
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
-            sra_study_json,
-            sra_sample_json)
+            sra_study_obj,
+            sra_sample_obj)
         sra_sequencing_run_set_obj = SRARunSet.create_object(runs=[run_obj])
 
         sequencing_run_set = sra_sequencing_run_set_obj.restrict_to_experiments(
@@ -85,13 +85,13 @@ class TestSRARunSet:
             self,
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
-            sra_study_json,
-            sra_sample_json):
+            sra_study_obj,
+            sra_sample_obj):
         run_obj = self._create_run_with_attributes(
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
-            sra_study_json,
-            sra_sample_json)
+            sra_study_obj,
+            sra_sample_obj)
         sra_sequencing_run_set_obj = SRARunSet.create_object(runs=[run_obj])
         assert (
                 sra_sequencing_run_set_obj.get_sequencing_run_for_experiment(

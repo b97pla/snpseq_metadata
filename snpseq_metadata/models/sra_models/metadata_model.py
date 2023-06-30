@@ -29,6 +29,12 @@ class SRAMetadataModel(MetadataModel):
     def __eq__(self, other: object):
         return super().__eq__(other) and self.to_json() == other.to_json()
 
+    def __getattr__(self, item) -> Optional[str]:
+        if item in self.model_object.__dict__:
+            attr = getattr(self.model_object, item)
+            if type(attr) is str:
+                return attr
+
     def to_json(self, **kwargs: Dict) -> Dict:
         return self.exporter.to_json(
             self.model_object,

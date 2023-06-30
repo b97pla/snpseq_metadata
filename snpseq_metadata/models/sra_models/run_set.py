@@ -44,7 +44,7 @@ class SRARunSet(SRAMetadataModel):
         try:
             return next(
                 filter(
-                    lambda run: run.is_project(experiment.study_ref.model_object.refname) and
+                    lambda run: run.is_project(experiment.study_ref.refname) and
                                 run.is_sample(
                                     experiment.model_object.design.sample_descriptor.refname),
                     self.runs,

@@ -38,7 +38,7 @@ class SRAExperimentRef(SRAExperimentBase):
     model_object_parent_field: ClassVar[Optional[Tuple[Type, str]]] = (Run, "experiment_ref")
 
     def __str__(self) -> str:
-        return self.model_object.refname
+        return self.refname
 
     @classmethod
     def create_object(cls: Type[TR], experiment_name: str) -> TR:
@@ -46,13 +46,13 @@ class SRAExperimentRef(SRAExperimentBase):
         return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
-        return [("NAME", self.model_object.refname)]
+        return [("NAME", self.refname)]
 
     def is_reference_to(self, other: T) -> bool:
         return all(
             [
                 isinstance(other, SRAExperiment),
-                self.model_object.refname == other.model_object.alias,
+                self.refname == other.alias,
             ]
         )
 
@@ -99,14 +99,14 @@ class SRAExperiment(SRAExperimentBase):
         )
 
     def to_manifest(self) -> List[Tuple[str, str]]:
-        manifest = [("NAME", self.model_object.alias)]
+        manifest = [("NAME", self.alias)]
         manifest.extend(self.study_ref.to_manifest())
         manifest.extend(self.platform.to_manifest())
         manifest.extend(self.library.to_manifest())
         return manifest
 
     def get_reference(self) -> SRAExperimentRef:
-        return SRAExperimentRef.create_object(experiment_name=self.model_object.alias)
+        return SRAExperimentRef.create_object(experiment_name=self.alias)
 
 
 class SRAExperimentSet(SRAMetadataModel):

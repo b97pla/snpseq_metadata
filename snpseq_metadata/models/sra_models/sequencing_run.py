@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional, TypeVar, Type, Tuple
+from typing import ClassVar, List, Optional, TypeVar, Type, Tuple, Union
 import datetime
 from xsdata.models.datatype import XmlDateTime
 
@@ -23,6 +23,16 @@ class SRARun(SRAMetadataModel):
         super().__init__(model_object=model_object)
         self.experiment = experiment
         self.fastqfiles = fastqfiles
+
+    def __getattr__(self, item) -> Union[None, str, List[SRAAttribute]]:
+        attr = super().__getattr__(item)
+        if attr or item not in self.model_object.__dict__:
+            return attr
+        attr = getattr(self.model_object, item)
+        if type(attr) == Run.RunAttributes:
+            return [
+                SRAAttribute.from_model_object(run_attribute)
+                for run_attribute in attr.run_attribute]
 
     @classmethod
     def create_object(
@@ -65,13 +75,11 @@ class SRARun(SRAMetadataModel):
         return manifest
 
     def is_project(self, project_id: str) -> Optional[bool]:
-        if self.model_object.run_attributes:
-            for run_attribute in self.model_object.run_attributes.run_attribute:
-                if run_attribute.tag == "project_id":
-                    return run_attribute.value == project_id
+        for run_attribute in self.run_attributes or []:
+            if run_attribute.tag == "project_id":
+                return run_attribute.value == project_id
 
     def is_sample(self, sample_id: str) -> Optional[bool]:
-        if self.model_object.run_attributes:
-            for run_attribute in self.model_object.run_attributes.run_attribute:
-                if run_attribute.tag == "sample_id":
-                    return run_attribute.value == sample_id
+        for run_attribute in self.run_attributes or []:
+            if run_attribute.tag == "sample_id":
+                return run_attribute.value == sample_id

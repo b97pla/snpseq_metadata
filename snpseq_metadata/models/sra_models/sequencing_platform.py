@@ -1,5 +1,5 @@
 import dataclasses
-from typing import ClassVar, Type, TypeVar, List, Tuple
+from typing import ClassVar, Optional, Type, TypeVar, List, Tuple
 
 from snpseq_metadata.models.xsdata import PlatformType, TypeIlluminaModel
 from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
@@ -11,6 +11,19 @@ T = TypeVar("T", "SRASequencingPlatform", "SRAIlluminaSequencingPlatform")
 class SRASequencingPlatform(SRAMetadataModel):
     model_object_class: ClassVar[Type] = PlatformType
 
+    def __getattr__(self, item) -> Optional[str]:
+        try:
+            if item in ("platform", "instrument_model"):
+                field = next(
+                    filter(
+                        lambda x: getattr(self.model_object, x.name),
+                        dataclasses.fields(self.model_object)))
+                if item == "platform":
+                    return field.metadata["name"]
+                return getattr(self.model_object, field.name).instrument_model.value
+        except StopIteration:
+            pass
+
     @classmethod
     def create_object(cls: Type[T], model_name: str) -> T:
         raise NotImplementedError
@@ -20,6 +33,7 @@ class SRASequencingPlatform(SRAMetadataModel):
 
 
 class SRAIlluminaSequencingPlatform(SRASequencingPlatform):
+
     @classmethod
     def object_from_name(cls: Type[T], model_name: str) -> TypeIlluminaModel:
         model_dict = {
@@ -49,21 +63,8 @@ class SRAIlluminaSequencingPlatform(SRASequencingPlatform):
         return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
-        manifest = []
-        manifest_fields = ["illumina"]
-        for field in filter(
-            lambda f: f.name in manifest_fields,
-            dataclasses.fields(self.model_object),
-        ):
-            manifest.extend(
-                [
-                    ("PLATFORM", field.metadata["name"]),
-                    (
-                        "INSTRUMENT",
-                        getattr(
-                            getattr(self.model_object, field.name), "instrument_model"
-                        ).value,
-                    ),
-                ]
-            )
+        manifest = [
+            ("PLATFORM", self.platform),
+            ("INSTRUMENT", self.instrument_model)
+        ]
         return manifest
