@@ -23,6 +23,12 @@ class TestSRAResultFile:
     def test_to_manifest(self, sra_result_file_obj, sra_result_file_manifest):
         assert sra_result_file_obj.to_manifest() == sra_result_file_manifest
 
+    def test___getattr__(self, sra_result_file_obj, sra_result_file_json):
+        assert sra_result_file_obj.filename == sra_result_file_json["filename"]
+        assert sra_result_file_obj.checksum == sra_result_file_json["checksum"]
+        assert sra_result_file_obj.filetype == sra_result_file_json["filetype"]
+        assert sra_result_file_obj.checksum_method == sra_result_file_json["checksum_method"]
+
     def test___eq__(self, sra_result_file_obj, sra_result_file_json):
         def _check_match(variation, should_match=True):
             other_json = {

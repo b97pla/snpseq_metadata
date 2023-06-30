@@ -16,6 +16,11 @@ class TestSRAAttribute:
         assert sra_attribute_obj.to_xml(xml_declaration=False).split() == \
                sra_attribute_xml.split()
 
+    def test___getattr__(self, sra_attribute_obj, sra_attribute_json):
+        assert sra_attribute_obj.tag == sra_attribute_json["TAG"]
+        assert sra_attribute_obj.value == sra_attribute_json["VALUE"]
+        assert sra_attribute_obj.units == sra_attribute_json["UNITS"]
+
     def test___str__(self, sra_attribute_obj, sra_attribute_json):
         assert str(sra_attribute_obj) == f"{sra_attribute_json['TAG']} = " \
                                          f"{sra_attribute_json['VALUE']} " \
