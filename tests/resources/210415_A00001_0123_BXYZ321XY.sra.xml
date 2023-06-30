@@ -20,6 +20,10 @@
         <TAG>sample_id</TAG>
         <VALUE>AB-1234-SampleA-1</VALUE>
       </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
+        <VALUE>Sample_AB-1234-SampleA-1</VALUE>
+      </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>
   </RUN>
   <RUN center_name="National Genomics Infrastructure, Uppsala" run_date="2021-04-15T00:00:00" run_center="National Genomics Infrastructure, Uppsala">
@@ -41,6 +45,10 @@
       <RUN_ATTRIBUTE>
         <TAG>sample_id</TAG>
         <VALUE>AB-1234-SampleA-2</VALUE>
+      </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
+        <VALUE>Sample_AB-1234-SampleA-2</VALUE>
       </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>
   </RUN>
@@ -64,6 +72,10 @@
         <TAG>sample_id</TAG>
         <VALUE>AB-1234-SampleB</VALUE>
       </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
+        <VALUE>Sample_AB-1234-SampleB</VALUE>
+      </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>
   </RUN>
   <RUN center_name="National Genomics Infrastructure, Uppsala" run_date="2021-04-15T00:00:00" run_center="National Genomics Infrastructure, Uppsala">
@@ -84,6 +96,10 @@
       </RUN_ATTRIBUTE>
       <RUN_ATTRIBUTE>
         <TAG>sample_id</TAG>
+        <VALUE>CD-5678-SampleA-1</VALUE>
+      </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
         <VALUE>CD-5678-SampleA-1</VALUE>
       </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>
@@ -108,6 +124,10 @@
         <TAG>sample_id</TAG>
         <VALUE>CD-5678-SampleA-2</VALUE>
       </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
+        <VALUE>CD-5678-SampleA-2</VALUE>
+      </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>
   </RUN>
   <RUN center_name="National Genomics Infrastructure, Uppsala" run_date="2021-04-15T00:00:00" run_center="National Genomics Infrastructure, Uppsala">
@@ -128,6 +148,10 @@
       </RUN_ATTRIBUTE>
       <RUN_ATTRIBUTE>
         <TAG>sample_id</TAG>
+        <VALUE>CD-5678-SampleB</VALUE>
+      </RUN_ATTRIBUTE>
+      <RUN_ATTRIBUTE>
+        <TAG>sample_library_id</TAG>
         <VALUE>CD-5678-SampleB</VALUE>
       </RUN_ATTRIBUTE>
     </RUN_ATTRIBUTES>

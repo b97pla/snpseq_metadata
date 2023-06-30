@@ -63,3 +63,15 @@ class SRARun(SRAMetadataModel):
         for fastqfile in self.fastqfiles:
             manifest.extend(fastqfile.to_manifest())
         return manifest
+
+    def is_project(self, project_id: str) -> Optional[bool]:
+        if self.model_object.run_attributes:
+            for run_attribute in self.model_object.run_attributes.run_attribute:
+                if run_attribute.tag == "project_id":
+                    return run_attribute.value == project_id
+
+    def is_sample(self, sample_id: str) -> Optional[bool]:
+        if self.model_object.run_attributes:
+            for run_attribute in self.model_object.run_attributes.run_attribute:
+                if run_attribute.tag == "sample_id":
+                    return run_attribute.value == sample_id

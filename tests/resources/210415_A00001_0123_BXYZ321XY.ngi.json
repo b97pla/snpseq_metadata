@@ -36,6 +36,10 @@
         {
           "tag": "sample_id",
           "value": "AB-1234-SampleA-1"
+        },
+        {
+          "tag": "sample_library_id",
+          "value": "Sample_AB-1234-SampleA-1"
         }
       ],
       "fastqfiles": [
@@ -91,6 +95,10 @@
         {
           "tag": "sample_id",
           "value": "AB-1234-SampleA-2"
+        },
+        {
+          "tag": "sample_library_id",
+          "value": "Sample_AB-1234-SampleA-2"
         }
       ],
       "fastqfiles": [
@@ -146,6 +154,10 @@
         {
           "tag": "sample_id",
           "value": "AB-1234-SampleB"
+        },
+        {
+          "tag": "sample_library_id",
+          "value": "Sample_AB-1234-SampleB"
         }
       ],
       "fastqfiles": [
@@ -200,6 +212,10 @@
         },
         {
           "tag": "sample_id",
+          "value": "CD-5678-SampleA-1"
+        },
+        {
+          "tag": "sample_library_id",
           "value": "CD-5678-SampleA-1"
         }
       ],
@@ -256,6 +272,10 @@
         {
           "tag": "sample_id",
           "value": "CD-5678-SampleA-2"
+        },
+        {
+          "tag": "sample_library_id",
+          "value": "CD-5678-SampleA-2"
         }
       ],
       "fastqfiles": [
@@ -310,6 +330,10 @@
         },
         {
           "tag": "sample_id",
+          "value": "CD-5678-SampleB"
+        },
+        {
+          "tag": "sample_library_id",
           "value": "CD-5678-SampleB"
         }
       ],

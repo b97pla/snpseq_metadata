@@ -201,6 +201,12 @@ class NGIFlowcell(NGIMetadataModel):
                 tag="sample_id",
                 value=experiment_ref.sample.sample_id
             )]
+        if experiment_ref.sample.sample_library_id:
+            run_attribute.append(
+                NGIAttribute(
+                    tag="sample_library_id",
+                    value=experiment_ref.sample.sample_library_id
+                ))
         return NGIRun(
             run_alias=f"{experiment_ref.alias}-{self.flowcell_id}",
             experiment=experiment_ref,
