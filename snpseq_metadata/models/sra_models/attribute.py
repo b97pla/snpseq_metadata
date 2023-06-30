@@ -21,13 +21,13 @@ class SRAAttribute(SRAMetadataModel):
 
     def to_manifest(self) -> List[Tuple[str, str]]:
         return [(
-            self.model_object.tag.upper(),
-            f"{self.model_object.value} {self.model_object.units or ''}")]
+            self.tag.upper(),
+            f"{self.value} {self.units or ''}")]
 
     def __str__(self) -> str:
-        return f"{self.model_object.tag} = " \
-               f"{self.model_object.value} " \
-               f"{self.model_object.units or ''}"
+        return f"{self.tag} = " \
+               f"{self.value} " \
+               f"{self.units or ''}"
 
     def __hash__(self) -> int:
         return str(self).__hash__()

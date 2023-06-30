@@ -1,28 +1,39 @@
-from typing import ClassVar, List, Optional, TypeVar, Type, Tuple
+from typing import ClassVar, List, Optional, TypeVar, Type, Tuple, Union
 import datetime
 from xsdata.models.datatype import XmlDateTime
 
 from snpseq_metadata.models.sra_models.attribute import SRAAttribute
-from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase
+from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase, SRAExperimentRef, \
+    SRAExperiment
 from snpseq_metadata.models.sra_models.file_models import SRAFastqFile
 from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
 from snpseq_metadata.models.xsdata import Run
 
 T = TypeVar("T", bound="SRARun")
+X = TypeVar("X", None, str, List[SRAAttribute], List[SRAFastqFile], SRAExperimentBase)
 
 
 class SRARun(SRAMetadataModel):
     model_object_class: ClassVar[Type] = Run
 
-    def __init__(
-        self,
-        model_object: model_object_class,
-        experiment: Optional[SRAExperimentBase] = None,
-        fastqfiles: Optional[List[SRAFastqFile]] = None,
-    ) -> None:
-        super().__init__(model_object=model_object)
-        self.experiment = experiment
-        self.fastqfiles = fastqfiles
+    def __getattr__(self, item: str) -> X:
+        attr = super().__getattr__(item)
+        if attr:
+            return attr
+        if item == "fastqfiles":
+            attr = getattr(self.model_object, "data_block")
+            return [
+                SRAFastqFile.from_model_object(model_object=file_model)
+                for file_model in attr.files.file]
+        if item in ["experiment", "experiment_ref"]:
+            attr = getattr(self.model_object, "experiment_ref")
+            return SRAExperimentRef.from_model_object(model_object=attr) \
+                   or SRAExperiment.from_model_object(model_object=attr)
+        attr = getattr(self.model_object, item)
+        if type(attr) == Run.RunAttributes:
+            return [
+                SRAAttribute.from_model_object(run_attribute)
+                for run_attribute in attr.run_attribute]
 
     @classmethod
     def create_object(
@@ -52,11 +63,7 @@ class SRARun(SRAMetadataModel):
             data_block=xsd_data_block,
             run_attributes=xsd_run_attributes
         )
-        return cls(
-            model_object=model_object,
-            experiment=experiment,
-            fastqfiles=fastqfiles,
-        )
+        return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
         manifest = []
@@ -65,13 +72,11 @@ class SRARun(SRAMetadataModel):
         return manifest
 
     def is_project(self, project_id: str) -> Optional[bool]:
-        if self.model_object.run_attributes:
-            for run_attribute in self.model_object.run_attributes.run_attribute:
-                if run_attribute.tag == "project_id":
-                    return run_attribute.value == project_id
+        for run_attribute in self.run_attributes or []:
+            if run_attribute.tag == "project_id":
+                return run_attribute.value == project_id
 
     def is_sample(self, sample_id: str) -> Optional[bool]:
-        if self.model_object.run_attributes:
-            for run_attribute in self.model_object.run_attributes.run_attribute:
-                if run_attribute.tag == "sample_id":
-                    return run_attribute.value == sample_id
+        for run_attribute in self.run_attributes or []:
+            if run_attribute.tag == "sample_id":
+                return run_attribute.value == sample_id
