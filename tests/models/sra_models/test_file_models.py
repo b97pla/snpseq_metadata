@@ -59,8 +59,8 @@ class TestSRAResultFile:
         assert (
             SRAResultFile.object_from_method(
                 checksum_method=sra_result_file_json["checksum_method"]
-            )
-            == sra_result_file_obj.model_object.checksum_method
+            ).value
+            == sra_result_file_obj.checksum_method
         )
         with pytest.raises(ChecksumMethodNotRecognizedException):
             SRAResultFile.object_from_method(
@@ -71,8 +71,8 @@ class TestSRAResultFile:
         assert (
             SRAResultFile.object_from_filetype(
                 filetype=sra_result_file_json["filetype"]
-            )
-            == sra_result_file_obj.model_object.filetype
+            ).value
+            == sra_result_file_obj.filetype
         )
         with pytest.raises(FiletypeNotRecognizedException):
             SRAResultFile.object_from_filetype(filetype="non-existing-filetype")
