@@ -51,11 +51,7 @@ class TestSRARunSet:
         }
         sra_sequencing_run_json["RUN_ATTRIBUTES"] = run_attributes
         run_model_object = SRARun.from_json(json_obj=sra_sequencing_run_json)
-        run_obj = SRARun(
-            model_object=run_model_object,
-            experiment=sra_sequencing_run_obj.experiment,
-            fastqfiles=sra_sequencing_run_obj.fastqfiles
-        )
+        run_obj = SRARun(model_object=run_model_object)
         return run_obj
 
     def test_restrict_to_experiments(
@@ -86,7 +82,8 @@ class TestSRARunSet:
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
             sra_study_obj,
-            sra_sample_obj):
+            sra_sample_obj,
+            sra_experiment_obj):
         run_obj = self._create_run_with_attributes(
             sra_sequencing_run_json,
             sra_sequencing_run_obj,
@@ -95,4 +92,4 @@ class TestSRARunSet:
         sra_sequencing_run_set_obj = SRARunSet.create_object(runs=[run_obj])
         assert (
                 sra_sequencing_run_set_obj.get_sequencing_run_for_experiment(
-                    sra_sequencing_run_obj.experiment) == run_obj)
+                    sra_experiment_obj) == run_obj)

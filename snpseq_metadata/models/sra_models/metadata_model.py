@@ -76,3 +76,8 @@ class SRAMetadataModel(MetadataModel):
             return field.metadata.get("name")
         except Exception as e:
             return None
+
+    @classmethod
+    def from_model_object(cls: Type[T], model_object: model_object_class) -> Optional[T]:
+        if type(model_object) == cls.model_object_class:
+            return cls(model_object=model_object)

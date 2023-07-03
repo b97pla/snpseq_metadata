@@ -23,12 +23,8 @@ TLS = TypeVar("TLS", TypeLibraryStrategy, TypeLibrarySelection, TypeLibrarySourc
 class SRALibrary(SRAMetadataModel):
     model_object_class: ClassVar[Type] = LibraryType
 
-    def __init__(
-        self,
-        model_object: model_object_class,
-        sample: Optional[SRASampleDescriptor] = None):
+    def __init__(self, model_object: model_object_class):
         super().__init__(model_object)
-        self.sample = sample
 
     @classmethod
     def object_from_paired(
@@ -93,7 +89,7 @@ class SRALibrary(SRAMetadataModel):
             sample_descriptor=sample.model_object,
             library_descriptor=xsdlibrary,
         )
-        return cls(model_object=model_object, sample=sample)
+        return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
         manifest = (
@@ -116,7 +112,7 @@ class SRALibrary(SRAMetadataModel):
         manifest.extend(self.sample.to_manifest())
         return manifest
 
-    def __getattr__(self, item) -> Union[None, str, SRASampleDescriptor]:
+    def __getattr__(self, item: str) -> Union[None, str, SRASampleDescriptor]:
         attr = super().__getattr__(item)
         if attr:
             return attr

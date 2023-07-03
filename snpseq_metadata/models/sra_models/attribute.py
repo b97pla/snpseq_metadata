@@ -19,12 +19,6 @@ class SRAAttribute(SRAMetadataModel):
         model_object = cls.model_object_class(tag=tag, value=value, units=units)
         return cls(model_object=model_object)
 
-    @classmethod
-    def from_model_object(
-            cls: Type[T],
-            model_object: model_object_class) -> T:
-        return cls(model_object=model_object)
-
     def to_manifest(self) -> List[Tuple[str, str]]:
         return [(
             self.tag.upper(),

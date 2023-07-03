@@ -24,9 +24,9 @@ class SRAResultFile(SRAMetadataModel):
             and self.checksum_method == other.checksum_method
         )
 
-    def __getattr__(self, item) -> Optional[str]:
+    def __getattr__(self, item: str) -> Optional[str]:
         attr = super().__getattr__(item)
-        if attr or item not in self.model_object.__dict__:
+        if attr:
             return attr
         attr = getattr(self.model_object, item)
         if type(attr) in (FileChecksumMethod, FileFiletype):

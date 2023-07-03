@@ -3,31 +3,32 @@ import datetime
 from xsdata.models.datatype import XmlDateTime
 
 from snpseq_metadata.models.sra_models.attribute import SRAAttribute
-from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase
+from snpseq_metadata.models.sra_models.experiment import SRAExperimentBase, SRAExperimentRef, \
+    SRAExperiment
 from snpseq_metadata.models.sra_models.file_models import SRAFastqFile
 from snpseq_metadata.models.sra_models.metadata_model import SRAMetadataModel
 from snpseq_metadata.models.xsdata import Run
 
 T = TypeVar("T", bound="SRARun")
+X = TypeVar("X", None, str, List[SRAAttribute], List[SRAFastqFile], SRAExperimentBase)
 
 
 class SRARun(SRAMetadataModel):
     model_object_class: ClassVar[Type] = Run
 
-    def __init__(
-        self,
-        model_object: model_object_class,
-        experiment: Optional[SRAExperimentBase] = None,
-        fastqfiles: Optional[List[SRAFastqFile]] = None,
-    ) -> None:
-        super().__init__(model_object=model_object)
-        self.experiment = experiment
-        self.fastqfiles = fastqfiles
-
-    def __getattr__(self, item) -> Union[None, str, List[SRAAttribute]]:
+    def __getattr__(self, item: str) -> X:
         attr = super().__getattr__(item)
-        if attr or item not in self.model_object.__dict__:
+        if attr:
             return attr
+        if item == "fastqfiles":
+            attr = getattr(self.model_object, "data_block")
+            return [
+                SRAFastqFile.from_model_object(model_object=file_model)
+                for file_model in attr.files.file]
+        if item in ["experiment", "experiment_ref"]:
+            attr = getattr(self.model_object, "experiment_ref")
+            return SRAExperimentRef.from_model_object(model_object=attr) \
+                   or SRAExperiment.from_model_object(model_object=attr)
         attr = getattr(self.model_object, item)
         if type(attr) == Run.RunAttributes:
             return [
@@ -62,11 +63,7 @@ class SRARun(SRAMetadataModel):
             data_block=xsd_data_block,
             run_attributes=xsd_run_attributes
         )
-        return cls(
-            model_object=model_object,
-            experiment=experiment,
-            fastqfiles=fastqfiles,
-        )
+        return cls(model_object=model_object)
 
     def to_manifest(self) -> List[Tuple[str, str]]:
         manifest = []
